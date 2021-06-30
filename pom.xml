@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>cz.muni.ics.kypo</groupId>
+    <artifactId>kypo-answers-storage</artifactId>
+    <version>1.0.0</version>
+
+    <name>kypo-answers-storage</name>
+    <description>Project for answers from sandboxes</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+
+        <!-- mapstruct version -->
+        <org.mapstruct.version>1.3.0.Final</org.mapstruct.version>
+
+        <squiggly.filter.jackson.version>1.3.18</squiggly.filter.jackson.version>
+        <!-- rest API documentation generation -->
+        <github.kongchen.version>3.1.8</github.kongchen.version>
+        <!-- library to generate sha256 from sub and issuer -->
+        <commons.codec.version>1.11</commons.codec.version>
+        <proprietary-repo-id>gitlab-maven</proprietary-repo-id>
+
+        <!--swagger versions -->
+        <swagger.version>2.9.2</swagger.version>
+        <swagger.annotations>1.5.22</swagger.annotations>
+        <swagger.directory>${basedir}/../doc-files</swagger.directory>
+        <swagger.skip>true</swagger.skip>
+        <swagger.host>localhost:8087</swagger.host>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.kongchen</groupId>
+            <artifactId>swagger-maven-plugin</artifactId>
+            <version>${github.kongchen.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>${github.kongchen.version}</version>
+                <configuration>
+                    <skipSwaggerGeneration>${swagger.skip}</skipSwaggerGeneration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>true</springmvc>
+                            <locations>
+                                <location>cz.muni.ics.kypo.answers.storage</location>
+                            </locations>
+                            <schemes>http,https</schemes>
+                            <host>${swagger.host}</host>
+                            <basePath>/kypo-rest-answers-storage/api/v1</basePath>
+                            <info>
+                                <title>KYPO Answers Storage - API Reference</title>
+                                <version>Version: ${project.version}</version>
+                            </info>
+                            <securityDefinitions>
+                                <securityDefinition>
+                                    <!--                                This is configuration of security for Open API generated based on swagger, file in resources package.-->
+                                    <json>/securityDefinition.json</json>
+                                </securityDefinition>
+                            </securityDefinitions>
+                            <swaggerDirectory>${swagger.directory}</swaggerDirectory>
+                            <swaggerFileName>kypo-answers-storage-swagger-open-api</swaggerFileName>
+                            <outputFormats>yaml</outputFormats>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
