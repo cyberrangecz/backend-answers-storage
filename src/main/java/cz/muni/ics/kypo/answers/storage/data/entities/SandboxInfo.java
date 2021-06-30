@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class SandboxInfo implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accessTokenGenerator")
-    @SequenceGenerator(name = "accessTokenGenerator", sequenceName = "sandbox_info_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sandboxInfoGenerator")
+    @SequenceGenerator(name = "sandboxInfoGenerator", sequenceName = "sandbox_info_seq")
     @Column(name = "sandbox_info_id", nullable = false, unique = true)
     private Long id;
     @Column(name = "sandbox_ref_id")
