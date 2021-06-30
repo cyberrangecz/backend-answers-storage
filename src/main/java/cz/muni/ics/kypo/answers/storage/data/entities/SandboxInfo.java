@@ -12,7 +12,7 @@ public class SandboxInfo implements Serializable {
     @SequenceGenerator(name = "sandboxInfoGenerator", sequenceName = "sandbox_info_seq")
     @Column(name = "sandbox_info_id", nullable = false, unique = true)
     private Long id;
-    @Column(name = "sandbox_ref_id")
+    @Column(name = "sandbox_ref_id", nullable = false, unique = true)
     private Long sandboxRefId;
 
     public Long getId() {
