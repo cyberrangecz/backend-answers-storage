@@ -20,12 +20,12 @@ import com.querydsl.core.types.Predicate;
 @Transactional
 public class SandboxAnswersService {
 
-    private SandboxInfoRepository sandboxInfoRepository;
-    private SandboxInfoMapper sandboxInfoMapper;
+    private final SandboxInfoRepository sandboxInfoRepository;
+    private final SandboxInfoMapper sandboxInfoMapper;
 
     @Autowired
-    public SandboxAnswersService(SandboxInfoRepository sandboxInfoRepository,
-                                 SandboxInfoMapper sandboxInfoMapper) {
+    public SandboxAnswersService(final SandboxInfoRepository sandboxInfoRepository,
+                                 final SandboxInfoMapper sandboxInfoMapper) {
         this.sandboxInfoRepository = sandboxInfoRepository;
         this.sandboxInfoMapper = sandboxInfoMapper;
     }

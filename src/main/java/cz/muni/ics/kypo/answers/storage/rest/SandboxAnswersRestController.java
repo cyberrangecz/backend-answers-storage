@@ -23,7 +23,7 @@ import com.querydsl.core.types.Predicate;
 @Validated
 public class SandboxAnswersRestController {
 
-    private SandboxAnswersService sandboxAnswersService;
+    private final SandboxAnswersService sandboxAnswersService;
 
     /**
      * Instantiates a new SandboxAnswersRestController.
@@ -31,7 +31,7 @@ public class SandboxAnswersRestController {
      * @param sandboxAnswersService the user facade
      */
     @Autowired
-    public SandboxAnswersRestController(SandboxAnswersService sandboxAnswersService) {
+    public SandboxAnswersRestController(final SandboxAnswersService sandboxAnswersService) {
         this.sandboxAnswersService = sandboxAnswersService;
     }
 
@@ -70,7 +70,7 @@ public class SandboxAnswersRestController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answers for particular sandbox were found.", response = SandboxInfoDto.class),
+            @ApiResponse(code = 200, message = "The answers for all sandboxes were found.", response = SandboxInfoDto.class),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -96,5 +96,5 @@ public class SandboxAnswersRestController {
         sandboxAnswersService.storeAllAnswersForSandbox(sandboxInfoCreateDto);
         return ResponseEntity.noContent().build();
     }
-    
+
 }
