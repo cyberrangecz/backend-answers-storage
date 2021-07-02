@@ -1,24 +1,42 @@
 package cz.muni.ics.kypo.answers.storage.api;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@ApiModel(
+        value = "SandboxInfoDto"
+)
 public class SandboxInfoDto {
 
-    private Long sandboxId;
-    private SandboxAnswers sandboxAnswers;
+    @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "12")
+    private Long sandboxRefId;
+    @ApiModelProperty(value = "The answers for given sandbox")
+    private List<SandboxAnswersDto> sandboxAnswers = new ArrayList<>();
 
-    public Long getSandboxId() {
-        return sandboxId;
+    public Long getSandboxRefId() {
+        return sandboxRefId;
     }
 
-    public void setSandboxId(Long sandboxId) {
-        this.sandboxId = sandboxId;
+    public void setSandboxRefId(Long sandboxRefId) {
+        this.sandboxRefId = sandboxRefId;
     }
 
-    public SandboxAnswers getSandboxAnswers() {
+    public List<SandboxAnswersDto> getSandboxAnswers() {
         return sandboxAnswers;
     }
 
-    public void setSandboxAnswers(SandboxAnswers sandboxAnswers) {
+    public void setSandboxAnswers(List<SandboxAnswersDto> sandboxAnswers) {
         this.sandboxAnswers = sandboxAnswers;
     }
-    
+
+    @Override
+    public String toString() {
+        return "SandboxInfoDto{" +
+                "sandboxRefId=" + sandboxRefId +
+                ", sandboxAnswers=" + sandboxAnswers +
+                '}';
+    }
 }
