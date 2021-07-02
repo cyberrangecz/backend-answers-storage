@@ -1,5 +1,6 @@
 package cz.muni.ics.kypo.answers.storage.service;
 
+import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
 import cz.muni.ics.kypo.answers.storage.data.entities.SandboxInfo;
@@ -30,7 +31,7 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public SandboxInfoDto getSandboxAnswersInfo(Long sandboxRefId) {
+    public SandboxInfoDto getSandboxAswersBySandboxRefId(Long sandboxRefId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findByRefId(sandboxRefId)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", sandboxRefId.getClass(), sandboxRefId)));
         return sandboxInfoMapper.mapToDto(sandboxInfo);
@@ -40,6 +41,10 @@ public class SandboxAnswersService {
     public PageResultResource<SandboxInfoDto> getAllSandboxesAnswers(Predicate predicate, Pageable pageable) {
         Page<SandboxInfo> sandboxInfo = sandboxInfoRepository.findAll(predicate, pageable);
         return sandboxInfoMapper.mapToPageResultResource(sandboxInfo);
+    }
+
+    public void storeAllAnswersForSandbox(SandboxInfoCreateDto sandboxInfoCreateDto) {
+        sandboxInfoRepository.save(sandboxInfoMapper.mapCreateDtoToEntity(sandboxInfoCreateDto));
     }
 
 }

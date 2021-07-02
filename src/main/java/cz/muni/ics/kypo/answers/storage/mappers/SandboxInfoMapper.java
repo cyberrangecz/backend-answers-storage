@@ -1,5 +1,6 @@
 package cz.muni.ics.kypo.answers.storage.mappers;
 
+import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
 import cz.muni.ics.kypo.answers.storage.data.entities.SandboxInfo;
@@ -13,6 +14,8 @@ import java.util.List;
 public interface SandboxInfoMapper extends ParentMapper {
 
     SandboxInfoDto mapToDto(SandboxInfo sandboxInfo);
+
+    SandboxInfo mapCreateDtoToEntity(SandboxInfoCreateDto sandboxInfoCreateDto);
 
     default PageResultResource<SandboxInfoDto> mapToPageResultResource(Page<SandboxInfo> objects) {
         List<SandboxInfoDto> mapped = new ArrayList<>();
