@@ -6,8 +6,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "sandbox_answer")
 public class SandboxAnswers implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sandbox_answer_generator")
+    @SequenceGenerator(name = "sandbox_answer_generator", sequenceName = "sandbox_answer_id_seq")
     @Column(name = "sandbox_answer_id", nullable = false, unique = true)
     private Long id;
     @Column(name = "answer_content", nullable = false)

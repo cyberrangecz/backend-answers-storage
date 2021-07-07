@@ -10,7 +10,8 @@ import java.util.Set;
 public class SandboxInfo implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sandbox_info_generator")
+    @SequenceGenerator(name = "sandbox_info_generator", sequenceName = "sandbox_info_id_seq")
     @Column(name = "sandbox_info_id", nullable = false, unique = true)
     private Long id;
     @Column(name = "sandbox_ref_id", nullable = false, unique = true)

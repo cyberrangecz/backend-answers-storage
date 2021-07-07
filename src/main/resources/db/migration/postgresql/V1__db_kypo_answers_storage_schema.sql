@@ -1,21 +1,19 @@
-create table sandbox_answer (
-   sandbox_answer_id  bigserial not null,
-    answer_content varchar(255) not null,
-    answer_identifier varchar(255) not null,
-    sandbox_info_id int8,
-    primary key (sandbox_answer_id)
+CREATE TABLE sandbox_info (
+    sandbox_info_id bigserial NOT NULL PRIMARY KEY,
+    sandbox_ref_id  int8      NOT NULL UNIQUE
 );
+ALTER SEQUENCE sandbox_info_sandbox_info_id_seq RENAME TO sandbox_info_id_seq;
+ALTER SEQUENCE sandbox_info_id_seq INCREMENT 50;
 
-create table sandbox_info (
-   sandbox_info_id  bigserial not null,
-    sandbox_ref_id int8 not null,
-    primary key (sandbox_info_id)
+CREATE TABLE sandbox_answer (
+    sandbox_answer_id bigserial    NOT NULL PRIMARY KEY,
+    answer_content    varchar(255) NOT NULL,
+    answer_identifier varchar(255) NOT NULL,
+    sandbox_info_id   int8,
+    FOREIGN KEY (sandbox_info_id) REFERENCES sandbox_info
 );
+ALTER SEQUENCE sandbox_answer_sandbox_answer_id_seq RENAME TO sandbox_answer_id_seq;
+ALTER SEQUENCE sandbox_answer_id_seq INCREMENT 50;
 
-alter table sandbox_info
-   add constraint UK_7vwh6n5gwia9qm0446a9n2ffs unique (sandbox_ref_id);
-
-alter table sandbox_answer
-   add constraint FKew4md7g9pq3tah3yhodmdlytw
-   foreign key (sandbox_info_id)
-   references sandbox_info;
+CREATE UNIQUE INDEX sandbox_info_sandbox_ref_id_index ON sandbox_info (sandbox_ref_id);
+CREATE INDEX sandbox_answer_answer_identifier_index ON sandbox_answer (answer_identifier);
