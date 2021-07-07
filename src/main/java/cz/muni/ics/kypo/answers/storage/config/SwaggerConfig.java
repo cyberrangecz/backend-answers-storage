@@ -3,6 +3,7 @@ package cz.muni.ics.kypo.answers.storage.config;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.boot.starter.autoconfigure.OpenApiAutoConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -12,9 +13,9 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@ConditionalOnExpression(value = "${swagger.enabled:true}")
+@ConditionalOnExpression(value = "${swagger.enabled:false}")
 @EnableSwagger2
-public class SwaggerConfig {
+public class SwaggerConfig extends OpenApiAutoConfiguration {
 
     @Bean
     public Docket api() {
@@ -22,15 +23,17 @@ public class SwaggerConfig {
                 .groupName("public-api")
                 .apiInfo(apiInfo()).useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("cz.muni.ics.kypo.answers.storage.rest"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("KYPO Answers Storage Documentation")
-                .description("Developed by CSIRT-MU Team")
+                .title("KYPO Answers Storage - API Reference")
+                .description("Developed by KYPO team")
+                .license("MIT License")
+                .licenseUrl("https://opensource.org/licenses/MIT")
                 .build();
     }
 

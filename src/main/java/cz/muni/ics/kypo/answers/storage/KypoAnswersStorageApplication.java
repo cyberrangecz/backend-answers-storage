@@ -2,8 +2,9 @@ package cz.muni.ics.kypo.answers.storage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.boot.starter.autoconfigure.OpenApiAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = OpenApiAutoConfiguration.class)
 public class KypoAnswersStorageApplication {
 
     public static void main(String[] args) {

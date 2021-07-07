@@ -3,6 +3,7 @@ package cz.muni.ics.kypo.answers.storage.api;
 import io.swagger.annotations.ApiModelProperty;
 
 public class SandboxAnswersCreateDto {
+
     @ApiModelProperty(value = "The content of the KYPO answer in particular (phase/level)", example = "nmap 192.168.0.1")
     private String answerContent;
     @ApiModelProperty(value = "The identifier of the KYPO answer", example = "sandbox-1-2-answer")

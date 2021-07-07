@@ -9,9 +9,9 @@ import java.util.List;
 
 /**
  * This class is used to replace Page class and reduce number of returned elements (standard Page
- * class contains fields, which are not usefull (backward compatability)).
+ * class contains fields, which are not useful (backward compatability)).
  */
-@ApiModel(value = "PageResultResouce", description = "Content (Retrieved data) and meta information about REST API result page. Including page number, number of elements in page, size of elements, total number of elements and total number of pages")
+@ApiModel(value = "PageResultResource", description = "Content (Retrieved data) and meta information about REST API result page. Including page number, number of elements in page, size of elements, total number of elements and total number of pages")
 public class PageResultResource<E> {
 
     @JsonProperty(required = true)
