@@ -1,1 +1,1 @@
-1.0.3 Gitlab CI configuration
+1.0.4 Gitlab CI configuration and other usefull operations added.
