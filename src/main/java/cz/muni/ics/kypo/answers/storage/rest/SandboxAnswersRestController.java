@@ -1,5 +1,6 @@
 package cz.muni.ics.kypo.answers.storage.rest;
 
+import cz.muni.ics.kypo.answers.storage.api.SandboxAnswersDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
@@ -16,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.querydsl.core.types.Predicate;
+
+import java.util.List;
 
 @Api(value = "Endpoint for KYPO Sandbox Answers", tags = "sandboxes")
 @RestController
@@ -52,10 +55,9 @@ public class SandboxAnswersRestController {
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @GetMapping(path = "/{sandboxRefId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SandboxInfoDto> findAnswersForParticularSandbox(@ApiParam(value = "ID of training definition to be retrieved.", required = true)
-                                                                          @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
-        SandboxInfoDto sandboxInfoDto = sandboxAnswersService.getSandboxAnswersBySandboxRefId(sandboxRefId);
-        return ResponseEntity.ok(sandboxInfoDto);
+    public ResponseEntity<List<SandboxAnswersDto>> findAnswersForParticularSandbox(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
+                                                                                   @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
+        return ResponseEntity.ok(sandboxAnswersService.getSandboxAnswersBySandboxRefId(sandboxRefId));
     }
 
     /**

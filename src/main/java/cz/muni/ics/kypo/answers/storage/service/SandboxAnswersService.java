@@ -1,8 +1,10 @@
 package cz.muni.ics.kypo.answers.storage.service;
 
+import cz.muni.ics.kypo.answers.storage.api.SandboxAnswersDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
+import cz.muni.ics.kypo.answers.storage.data.entities.SandboxAnswers;
 import cz.muni.ics.kypo.answers.storage.data.entities.SandboxInfo;
 import cz.muni.ics.kypo.answers.storage.data.repositories.SandboxInfoRepository;
 import cz.muni.ics.kypo.answers.storage.exceptions.EntityErrorDetail;
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.Predicate;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -31,10 +36,11 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public SandboxInfoDto getSandboxAnswersBySandboxRefId(Long sandboxRefId) {
+    public List<SandboxAnswersDto> getSandboxAnswersBySandboxRefId(Long sandboxRefId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findByRefId(sandboxRefId)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", sandboxRefId.getClass(), sandboxRefId)));
-        return sandboxInfoMapper.mapToDto(sandboxInfo);
+        Set<SandboxAnswers> sandboxAnswersDtoSet = sandboxInfo.getSandboxAnswers();
+        return sandboxInfoMapper.mapToAnswers(sandboxAnswersDtoSet);
     }
 
     @Transactional(readOnly = true)
