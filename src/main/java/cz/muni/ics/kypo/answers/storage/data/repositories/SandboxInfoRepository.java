@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public interface SandboxInfoRepository extends JpaRepository<SandboxInfo, Long>, QuerydslPredicateExecutor<SandboxInfo> {
 
-    @Query("SELECT si FROM SandboxInfo si JOIN FETCH SandboxAnswers sa WHERE si.sandboxRefId = :sandboxRefId")
+    @Query("SELECT si FROM SandboxInfo si JOIN FETCH SandboxAnswer sa WHERE si.sandboxRefId = :sandboxRefId")
     Optional<SandboxInfo> findByRefId(@Param("sandboxRefId") Long sandboxRefId);
 
     @EntityGraph(attributePaths = {"sandboxAnswers"})

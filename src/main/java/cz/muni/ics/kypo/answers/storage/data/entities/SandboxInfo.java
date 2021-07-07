@@ -18,7 +18,7 @@ public class SandboxInfo implements Serializable {
     private Long sandboxRefId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sandboxInfo",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    private Set<SandboxAnswers> sandboxAnswers = new HashSet<>();
+    private Set<SandboxAnswer> sandboxAnswers = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class SandboxInfo implements Serializable {
         this.sandboxRefId = sandboxRefId;
     }
 
-    public Set<SandboxAnswers> getSandboxAnswers() {
+    public Set<SandboxAnswer> getSandboxAnswers() {
         return sandboxAnswers;
     }
 
-    public void setSandboxAnswers(Set<SandboxAnswers> sandboxAnswers) {
+    public void setSandboxAnswers(Set<SandboxAnswer> sandboxAnswers) {
         this.sandboxAnswers = sandboxAnswers;
     }
 

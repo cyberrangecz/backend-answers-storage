@@ -4,7 +4,7 @@ import cz.muni.ics.kypo.answers.storage.api.SandboxAnswersDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
-import cz.muni.ics.kypo.answers.storage.data.entities.SandboxAnswers;
+import cz.muni.ics.kypo.answers.storage.data.entities.SandboxAnswer;
 import cz.muni.ics.kypo.answers.storage.data.entities.SandboxInfo;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
@@ -18,9 +18,9 @@ public interface SandboxInfoMapper extends ParentMapper {
 
     SandboxInfoDto mapToDto(SandboxInfo sandboxInfo);
 
-    List<SandboxAnswersDto> mapToAnswers(Set<SandboxAnswers> sandboxAnswersSet);
+    List<SandboxAnswersDto> mapToAnswers(Set<SandboxAnswer> sandboxAnswerSet);
 
-    SandboxAnswers mapToAnswersDto(SandboxInfo sandboxInfo);
+    SandboxAnswer mapToAnswersDto(SandboxInfo sandboxInfo);
 
     SandboxInfo mapCreateDtoToEntity(SandboxInfoCreateDto sandboxInfoCreateDto);
 

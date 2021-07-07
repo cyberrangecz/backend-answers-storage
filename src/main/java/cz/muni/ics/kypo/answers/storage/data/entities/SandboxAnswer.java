@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "sandbox_answer")
-public class SandboxAnswers implements Serializable {
+public class SandboxAnswer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sandbox_answer_generator")
