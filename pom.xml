@@ -36,9 +36,9 @@
         <!--swagger versions -->
         <swagger.version>2.9.2</swagger.version>
         <swagger.annotations>1.5.22</swagger.annotations>
-        <swagger.directory>${basedir}/../doc-files</swagger.directory>
+        <swagger.directory>${basedir}/doc-files</swagger.directory>
         <swagger.skip>true</swagger.skip>
-        <swagger.host>localhost:8084</swagger.host>
+        <swagger.host>localhost:8087</swagger.host>
     </properties>
 
     <repositories>
