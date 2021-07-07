@@ -1,9 +1,9 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 1.0.0"
+  version: "Version: 1.0.5"
   title: "KYPO Answers Storage - API Reference"
-host: "localhost:8084"
+host: "localhost:8087"
 basePath: "/kypo-rest-answers-storage/api/v1"
 tags:
 - name: "sandboxes"
@@ -36,7 +36,7 @@ paths:
       summary: "Store all answers for particular sandbox."
       description: ""
       operationId: "storeAnswersForParticularSandbox"
-      produces:
+      consumes:
       - "application/json"
       parameters:
       - in: "body"
@@ -63,7 +63,7 @@ paths:
       parameters:
       - name: "sandboxRefId"
         in: "path"
-        description: "ID of training definition to be retrieved."
+        description: "ID sandbox for that we store answers."
         required: true
         type: "integer"
         format: "int64"
@@ -72,6 +72,25 @@ paths:
           description: "The answers for particular sandbox were found."
           schema:
             $ref: "#/definitions/SandboxInfoDto"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+    delete:
+      tags:
+      - "sandboxes"
+      summary: "Delete sandbox_ref with all answers."
+      description: ""
+      operationId: "deleteSandboxWithAnswers"
+      parameters:
+      - name: "sandboxRefId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "The sandbox with answers was successfully deleted."
         500:
           description: "Unexpected condition was encountered."
           schema:
