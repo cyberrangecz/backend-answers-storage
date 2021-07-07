@@ -31,7 +31,7 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public SandboxInfoDto getSandboxAswersBySandboxRefId(Long sandboxRefId) {
+    public SandboxInfoDto getSandboxAnswersBySandboxRefId(Long sandboxRefId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findByRefId(sandboxRefId)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", sandboxRefId.getClass(), sandboxRefId)));
         return sandboxInfoMapper.mapToDto(sandboxInfo);
@@ -41,6 +41,10 @@ public class SandboxAnswersService {
     public PageResultResource<SandboxInfoDto> getAllSandboxesAnswers(Predicate predicate, Pageable pageable) {
         Page<SandboxInfo> sandboxInfo = sandboxInfoRepository.findAll(predicate, pageable);
         return sandboxInfoMapper.mapToPageResultResource(sandboxInfo);
+    }
+
+    public void deleteSandboxWithAnswers(Long sandboxRefId) {
+        sandboxInfoRepository.deleteSandboxInfo(sandboxRefId);
     }
 
     public void storeAllAnswersForSandbox(SandboxInfoCreateDto sandboxInfoCreateDto) {

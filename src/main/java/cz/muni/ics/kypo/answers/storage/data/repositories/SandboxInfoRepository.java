@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,8 @@ public interface SandboxInfoRepository extends JpaRepository<SandboxInfo, Long>,
     @EntityGraph(attributePaths = {"sandboxAnswers"})
     Page<SandboxInfo> findAll(Predicate predicate, Pageable pageable);
 
+    @Modifying
+    @Query("DELETE FROM SandboxInfo si WHERE si.sandboxRefId = :sandboxRefId")
+    long deleteSandboxInfo(@Param("sandboxRefId") Long sandboxRefId);
 
 }

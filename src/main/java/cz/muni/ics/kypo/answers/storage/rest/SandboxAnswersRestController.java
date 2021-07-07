@@ -54,7 +54,7 @@ public class SandboxAnswersRestController {
     @GetMapping(path = "/{sandboxRefId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SandboxInfoDto> findAnswersForParticularSandbox(@ApiParam(value = "ID of training definition to be retrieved.", required = true)
                                                                           @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
-        SandboxInfoDto sandboxInfoDto = sandboxAnswersService.getSandboxAswersBySandboxRefId(sandboxRefId);
+        SandboxInfoDto sandboxInfoDto = sandboxAnswersService.getSandboxAnswersBySandboxRefId(sandboxRefId);
         return ResponseEntity.ok(sandboxInfoDto);
     }
 
@@ -91,9 +91,27 @@ public class SandboxAnswersRestController {
             @ApiResponse(code = 200, message = "The answers for particular sandbox were created."),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> storeAnswersForParticularSandbox(@RequestBody SandboxInfoCreateDto sandboxInfoCreateDto) {
         sandboxAnswersService.storeAllAnswersForSandbox(sandboxInfoCreateDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Delete sandbox_ref with all answers.
+     */
+    @ApiOperation(httpMethod = "DELETE",
+            value = "Delete sandbox_ref with all answers.",
+            nickname = "deleteSandboxWithAnswers",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The sandbox with answers was successfully deleted."),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @DeleteMapping(path = "/{sandboxRefId}")
+    public ResponseEntity<Void> deleteSandboxWithAnswers(@PathVariable("sandboxRefId") Long sandboxRefId) {
+        sandboxAnswersService.deleteSandboxWithAnswers(sandboxRefId);
         return ResponseEntity.noContent().build();
     }
 
