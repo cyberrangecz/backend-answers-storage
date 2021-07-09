@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface SandboxAnswerRepository extends JpaRepository<SandboxAnswer, Long>, QuerydslPredicateExecutor<SandboxAnswer> {
 
-    @Query("SELECT sa FROM SandboxAnswer sa JOIN FETCH SandboxInfo si WHERE " +
+    @Query("SELECT sa FROM SandboxInfo si INNER JOIN si.sandboxAnswers sa WHERE " +
             "si.sandboxRefId = :sandboxRefId AND sa.answerIdentifier = :answerIdentifier")
     Optional<SandboxAnswer> findAnswerBySandboxAndIdentifier(@Param("sandboxRefId") Long sandboxRefId, @Param("answerIdentifier") String answerIdentifier);
 }
