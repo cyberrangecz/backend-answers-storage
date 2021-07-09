@@ -111,11 +111,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
         <!--End Swagger tools-->
         <!-- mapstruct for mapping entities to dto -->
         <dependency>
