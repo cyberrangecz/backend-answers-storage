@@ -25,7 +25,7 @@ $ sudo docker build \
 Dockefile contains several default arguments:
 * USERNAME=postgres - the name of the user to connect to the database. 
 * PASSWORD=postgres - user password.
-* POSRGRES_DB=kypo-answers-storage - the name of the created database.
+* POSTGRES_DB=kypo-answers-storage - the name of the created database.
 * PROJECT_ARTIFACT_ID=kypo-answers-storage - the name of the project artifact.
 * PROPRIETARY_REPO_URL=YOUR-PATH-TO-PROPRIETARY_REPO.
 
