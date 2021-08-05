@@ -61,11 +61,13 @@ public class SandboxAnswersService {
     }
 
     public void deleteSandboxWithAnswers(Long sandboxRefId) {
-        sandboxInfoRepository.deleteSandboxInfo(sandboxRefId);
+        sandboxInfoRepository.deleteBySandboxRefId(sandboxRefId);
     }
 
     public void storeAllAnswersForSandbox(SandboxInfoCreateDto sandboxInfoCreateDto) {
-        sandboxInfoRepository.save(sandboxInfoMapper.mapCreateDtoToEntity(sandboxInfoCreateDto));
+        SandboxInfo sandboxInfo = sandboxInfoMapper.mapCreateDtoToEntity(sandboxInfoCreateDto);
+        sandboxInfo.getSandboxAnswers().forEach(sandboxAnswer -> sandboxAnswer.setSandboxInfo(sandboxInfo));
+        sandboxInfoRepository.save(sandboxInfo);
     }
 
 }

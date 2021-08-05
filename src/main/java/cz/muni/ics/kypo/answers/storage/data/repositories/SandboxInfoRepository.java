@@ -24,8 +24,6 @@ public interface SandboxInfoRepository extends JpaRepository<SandboxInfo, Long>,
     @EntityGraph(attributePaths = {"sandboxAnswers"})
     Page<SandboxInfo> findAll(Predicate predicate, Pageable pageable);
 
-    @Modifying
-    @Query("DELETE FROM SandboxInfo si WHERE si.sandboxRefId = :sandboxRefId")
-    long deleteSandboxInfo(@Param("sandboxRefId") Long sandboxRefId);
+    void deleteBySandboxRefId(Long sandboxRefId);
 
 }
