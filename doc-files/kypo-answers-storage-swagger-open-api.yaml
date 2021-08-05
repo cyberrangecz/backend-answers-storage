@@ -52,6 +52,26 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
   /sandboxes/{sandboxRefId}:
+    delete:
+      tags:
+      - "sandboxes"
+      summary: "Delete sandbox_ref with all answers."
+      description: ""
+      operationId: "deleteSandboxWithAnswers"
+      parameters:
+      - name: "sandboxRefId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "The sandbox with answers was successfully deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /sandboxes/{sandboxRefId}/answers:
     get:
       tags:
       - "sandboxes"
@@ -76,21 +96,32 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-    delete:
+  /sandboxes/{sandboxRefId}/answers/{answerIdentifier}:
+    get:
       tags:
       - "sandboxes"
-      summary: "Delete sandbox_ref with all answers."
+      summary: "Get answer for particular sandbox and by answer identifier."
       description: ""
-      operationId: "deleteSandboxWithAnswers"
+      operationId: "findAnswerBySandboxAndIdentifier"
+      produces:
+      - "application/json"
       parameters:
       - name: "sandboxRefId"
         in: "path"
+        description: "ID sandbox for that we store answers."
         required: true
         type: "integer"
         format: "int64"
+      - name: "answerIdentifier"
+        in: "path"
+        description: "Identifier of the answer."
+        required: true
+        type: "string"
       responses:
         200:
-          description: "The sandbox with answers was successfully deleted."
+          description: "The answer for particular sandbox and by identifier was found."
+          schema:
+            $ref: "#/definitions/SandboxInfoDto"
         500:
           description: "Unexpected condition was encountered."
           schema:

@@ -19,7 +19,8 @@ public class SwaggerConfig extends OpenApiAutoConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("public-api")
-                .apiInfo(apiInfo()).useDefaultResponseMessages(false)
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("cz.muni.ics.kypo.answers.storage.rest"))
                 .paths(PathSelectors.any())

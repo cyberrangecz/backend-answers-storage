@@ -17,7 +17,7 @@ public class SandboxInfo implements Serializable {
     @Column(name = "sandbox_ref_id", nullable = false, unique = true)
     private Long sandboxRefId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sandboxInfo",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+            cascade = CascadeType.ALL)
     private Set<SandboxAnswer> sandboxAnswers = new HashSet<>();
 
     public Long getId() {

@@ -11,6 +11,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -115,13 +116,14 @@ public class SandboxAnswersRestController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answers for particular sandbox were created."),
+            @ApiResponse(code = 201, message = "The answers for particular sandbox were created."),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> storeAnswersForParticularSandbox(@RequestBody SandboxInfoCreateDto sandboxInfoCreateDto) {
         sandboxAnswersService.storeAllAnswersForSandbox(sandboxInfoCreateDto);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
@@ -133,9 +135,10 @@ public class SandboxAnswersRestController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The sandbox with answers was successfully deleted."),
+            @ApiResponse(code = 204, message = "The sandbox with answers was successfully deleted."),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{sandboxRefId}")
     public ResponseEntity<Void> deleteSandboxWithAnswers(@PathVariable("sandboxRefId") Long sandboxRefId) {
         sandboxAnswersService.deleteSandboxWithAnswers(sandboxRefId);
