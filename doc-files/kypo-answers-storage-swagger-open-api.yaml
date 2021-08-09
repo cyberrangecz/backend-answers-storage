@@ -45,7 +45,7 @@ paths:
         schema:
           $ref: "#/definitions/SandboxInfoCreateDto"
       responses:
-        200:
+        201:
           description: "The answers for particular sandbox were created."
         500:
           description: "Unexpected condition was encountered."
@@ -65,7 +65,7 @@ paths:
         type: "integer"
         format: "int64"
       responses:
-        200:
+        204:
           description: "The sandbox with answers was successfully deleted."
         500:
           description: "Unexpected condition was encountered."
@@ -96,13 +96,13 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /sandboxes/{sandboxRefId}/answers/{answerIdentifier}:
+  /sandboxes/{sandboxRefId}/answers/{answerVariableName}:
     get:
       tags:
       - "sandboxes"
-      summary: "Get answer for particular sandbox and by answer identifier."
+      summary: "Get answer for particular sandbox and by answer variable name."
       description: ""
-      operationId: "findAnswerBySandboxAndIdentifier"
+      operationId: "findAnswerBySandboxAndVariableName"
       produces:
       - "application/json"
       parameters:
@@ -112,9 +112,9 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "answerIdentifier"
+      - name: "answerVariableName"
         in: "path"
-        description: "Identifier of the answer."
+        description: "Variable name of the answer."
         required: true
         type: "string"
       responses:
@@ -260,10 +260,10 @@ definitions:
         type: "string"
         example: "nmap 192.168.0.1"
         description: "The content of the KYPO answer in particular (phase/level)"
-      answerIdentifier:
+      answerVariableName:
         type: "string"
         example: "sandbox-1-2-answer"
-        description: "The identifier of the KYPO answer"
+        description: "The variable name of the KYPO answer"
   SandboxAnswersDto:
     type: "object"
     properties:
@@ -271,10 +271,10 @@ definitions:
         type: "string"
         example: "nmap 192.168.0.1"
         description: "The content of the KYPO answer in particular (phase/level)"
-      answerIdentifier:
+      answerVariableName:
         type: "string"
         example: "sandbox-1-2-answer"
-        description: "The identifier of the KYPO answer"
+        description: "The variable name of the KYPO answer"
   SandboxInfoCreateDto:
     type: "object"
     properties:
