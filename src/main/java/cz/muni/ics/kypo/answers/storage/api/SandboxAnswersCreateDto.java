@@ -6,8 +6,8 @@ public class SandboxAnswersCreateDto {
 
     @ApiModelProperty(value = "The content of the KYPO answer in particular (phase/level)", example = "nmap 192.168.0.1")
     private String answerContent;
-    @ApiModelProperty(value = "The identifier of the KYPO answer", example = "sandbox-1-2-answer")
-    private String answerIdentifier;
+    @ApiModelProperty(value = "The variable name of the KYPO answer", example = "sandbox-1-2-answer")
+    private String answerVariableName;
 
     public String getAnswerContent() {
         return answerContent;
@@ -17,19 +17,19 @@ public class SandboxAnswersCreateDto {
         this.answerContent = answerContent;
     }
 
-    public String getAnswerIdentifier() {
-        return answerIdentifier;
+    public String getAnswerVariableName() {
+        return answerVariableName;
     }
 
-    public void setAnswerIdentifier(String answerIdentifier) {
-        this.answerIdentifier = answerIdentifier;
+    public void setAnswerVariableName(String answerVariableName) {
+        this.answerVariableName = answerVariableName;
     }
 
     @Override
     public String toString() {
         return "SandboxAnswersCreateDto{" +
                 "answerContent='" + answerContent + '\'' +
-                ", answerIdentifier='" + answerIdentifier + '\'' +
+                ", answerVariableName='" + answerVariableName + '\'' +
                 '}';
     }
 }

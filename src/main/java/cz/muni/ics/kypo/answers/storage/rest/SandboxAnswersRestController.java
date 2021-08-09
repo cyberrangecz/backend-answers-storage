@@ -62,28 +62,28 @@ public class SandboxAnswersRestController {
     }
 
     /**
-     * Get answer for particular sandbox and by answer identifier.
+     * Get answer for particular sandbox and by answer variable name.
      *
      * @param sandboxRefId id of a sandbox.
-     * @param answerIdentifier identifier of an answer.
+     * @param answerVariableName variable name of an answer.
      * @return the content of the answer.
      */
     @ApiOperation(httpMethod = "GET",
-            value = "Get answer for particular sandbox and by answer identifier.",
+            value = "Get answer for particular sandbox and by answer variable name.",
             response = SandboxInfoDto.class,
-            nickname = "findAnswerBySandboxAndIdentifier",
+            nickname = "findAnswerBySandboxAndVariableName",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The answer for particular sandbox and by identifier was found.", response = String.class),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
-    @GetMapping(path = "/{sandboxRefId}/answers/{answerIdentifier}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> findAnswerBySandboxAndIdentifier(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
+    @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> findAnswerBySandboxAndVariableName(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
                                                                                    @PathVariable(value = "sandboxRefId") Long sandboxRefId,
-                                                                                   @ApiParam(value = "Identifier of the answer.", required = true)
-                                                                                   @PathVariable(value = "answerIdentifier") String answerIdentifier) {
-        return ResponseEntity.ok(sandboxAnswersService.getAnswerBySandboxAndIdentifier(sandboxRefId, answerIdentifier));
+                                                                                   @ApiParam(value = "Variable name of the answer.", required = true)
+                                                                                   @PathVariable(value = "answerVariableName") String answerVariableName) {
+        return ResponseEntity.ok(sandboxAnswersService.getAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName));
     }
 
     /**

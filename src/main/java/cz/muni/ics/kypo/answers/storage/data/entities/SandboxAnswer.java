@@ -14,8 +14,8 @@ public class SandboxAnswer implements Serializable {
     private Long id;
     @Column(name = "answer_content", nullable = false)
     private String answerContent;
-    @Column(name = "answer_identifier", nullable = false)
-    private String answerIdentifier;
+    @Column(name = "answer_variable_name", nullable = false)
+    private String answerVariableName;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sandbox_info_id")
     private SandboxInfo sandboxInfo;
@@ -36,12 +36,12 @@ public class SandboxAnswer implements Serializable {
         this.answerContent = answerContent;
     }
 
-    public String getAnswerIdentifier() {
-        return answerIdentifier;
+    public String getAnswerVariableName() {
+        return answerVariableName;
     }
 
-    public void setAnswerIdentifier(String answerIdentifier) {
-        this.answerIdentifier = answerIdentifier;
+    public void setAnswerVariableName(String answerVariableName) {
+        this.answerVariableName = answerVariableName;
     }
 
     public SandboxInfo getSandboxInfo() {
@@ -57,7 +57,7 @@ public class SandboxAnswer implements Serializable {
         return "SandboxAnswers{" +
                 "id=" + id +
                 ", answerContent='" + answerContent + '\'' +
-                ", answerIdentifier='" + answerIdentifier + '\'' +
+                ", answerVariableName='" + answerVariableName + '\'' +
                 '}';
     }
 }

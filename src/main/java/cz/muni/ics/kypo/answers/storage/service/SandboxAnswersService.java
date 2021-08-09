@@ -48,9 +48,9 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public String getAnswerBySandboxAndIdentifier(Long sandboxRefId, String answerIdentifier) {
-        return sandboxAnswerRepository.findAnswerBySandboxAndIdentifier(sandboxRefId, answerIdentifier)
-                .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxAnswer.class, "identifier", answerIdentifier.getClass(), answerIdentifier)))
+    public String getAnswerBySandboxAndVariableName(Long sandboxRefId, String answerVariableName) {
+        return sandboxAnswerRepository.findAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName)
+                .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxAnswer.class, "variable name", answerVariableName.getClass(), answerVariableName)))
                 .getAnswerContent();
     }
 

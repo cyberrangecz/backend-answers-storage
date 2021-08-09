@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface SandboxAnswerRepository extends JpaRepository<SandboxAnswer, Long>, QuerydslPredicateExecutor<SandboxAnswer> {
 
     @Query("SELECT sa FROM SandboxInfo si INNER JOIN si.sandboxAnswers sa WHERE " +
-            "si.sandboxRefId = :sandboxRefId AND sa.answerIdentifier = :answerIdentifier")
-    Optional<SandboxAnswer> findAnswerBySandboxAndIdentifier(@Param("sandboxRefId") Long sandboxRefId, @Param("answerIdentifier") String answerIdentifier);
+            "si.sandboxRefId = :sandboxRefId AND sa.answerVariableName = :answerVariableName")
+    Optional<SandboxAnswer> findAnswerBySandboxAndVariableName(@Param("sandboxRefId") Long sandboxRefId, @Param("answerVariableName") String answerVariableName);
 }
