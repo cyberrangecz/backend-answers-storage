@@ -56,7 +56,7 @@ public class SandboxAnswersRestController {
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @GetMapping(path = "/{sandboxRefId}/answers", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<SandboxAnswersDto>> findAnswersForParticularSandbox(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
+    public ResponseEntity<SandboxInfoDto> findAnswersForParticularSandbox(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
                                                                                    @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
         return ResponseEntity.ok(sandboxAnswersService.getSandboxAnswersBySandboxRefId(sandboxRefId));
     }

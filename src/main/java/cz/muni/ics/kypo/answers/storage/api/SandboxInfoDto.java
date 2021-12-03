@@ -16,6 +16,14 @@ public class SandboxInfoDto {
     @ApiModelProperty(value = "The answers for given sandbox")
     private List<SandboxAnswersDto> sandboxAnswers = new ArrayList<>();
 
+    public SandboxInfoDto() {
+    }
+
+    public SandboxInfoDto(Long sandboxRefId, List<SandboxAnswersDto> sandboxAnswers) {
+        this.sandboxRefId = sandboxRefId;
+        this.sandboxAnswers = sandboxAnswers;
+    }
+
     public Long getSandboxRefId() {
         return sandboxRefId;
     }
