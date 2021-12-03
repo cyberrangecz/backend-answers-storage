@@ -11,7 +11,7 @@
 
     <groupId>cz.muni.ics.kypo</groupId>
     <artifactId>kypo-answers-storage</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 
     <name>kypo-answers-storage</name>
     <description>Project for answers from sandboxes</description>
