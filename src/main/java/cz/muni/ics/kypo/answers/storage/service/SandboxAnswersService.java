@@ -40,11 +40,11 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public List<SandboxAnswersDto> getSandboxAnswersBySandboxRefId(Long sandboxRefId) {
+    public SandboxInfoDto getSandboxAnswersBySandboxRefId(Long sandboxRefId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findByRefId(sandboxRefId)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", sandboxRefId.getClass(), sandboxRefId)));
         Set<SandboxAnswer> sandboxAnswerDtoSet = sandboxInfo.getSandboxAnswers();
-        return sandboxInfoMapper.mapToAnswers(sandboxAnswerDtoSet);
+        return new SandboxInfoDto(sandboxRefId, sandboxInfoMapper.mapToAnswers(sandboxAnswerDtoSet));
     }
 
     @Transactional(readOnly = true)
