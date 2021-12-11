@@ -47,6 +47,9 @@
         <!-- dependency management-->
         <guava.version>20.0</guava.version>
         <javassist.version>3.27.0-GA</javassist.version>
+
+        <!-- added to avoid log4j2 vulnerability CVE-2021-44228 -->
+        <log4j2.version>2.15.0</log4j2.version>
     </properties>
 
     <repositories>
