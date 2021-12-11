@@ -1,3 +1,4 @@
+1.0.8 Update log4j2 version to avoid CVE-2021-44228 vulnerability
 1.0.7 Return SandboxInfoDTO in findAnswersForParticularSandbox endpoint.
 1.0.6 New endpoint - get answer by sandbox id and answer variable name, fixed create and delete requests, integration of the Swagger.
 1.0.5 Gitlab CI configuration and other usefull operations added.
