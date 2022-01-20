@@ -1,6 +1,7 @@
 package cz.muni.ics.kypo.answers.storage.exceptionhandler;
 
 
+import cz.muni.ics.kypo.answers.storage.exceptions.BadRequestException;
 import cz.muni.ics.kypo.answers.storage.exceptions.EntityNotFoundException;
 import cz.muni.ics.kypo.answers.storage.exceptions.InternalServerErrorException;
 import cz.muni.ics.kypo.answers.storage.exceptions.errors.ApiEntityError;
@@ -32,7 +33,6 @@ import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -46,7 +46,7 @@ import java.util.List;
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final UrlPathHelper URL_PATH_HELPER = new UrlPathHelper();
-    private static Logger LOG = LoggerFactory.getLogger(CustomRestExceptionHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomRestExceptionHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(final TypeMismatchException ex, final HttpHeaders headers, final HttpStatus status,

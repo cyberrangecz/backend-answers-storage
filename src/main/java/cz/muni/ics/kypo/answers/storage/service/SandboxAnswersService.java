@@ -1,6 +1,6 @@
 package cz.muni.ics.kypo.answers.storage.service;
 
-import cz.muni.ics.kypo.answers.storage.api.SandboxAnswersDto;
+import com.querydsl.core.types.Predicate;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
@@ -17,9 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.querydsl.core.types.Predicate;
-
-import java.util.List;
 import java.util.Set;
 
 @Service

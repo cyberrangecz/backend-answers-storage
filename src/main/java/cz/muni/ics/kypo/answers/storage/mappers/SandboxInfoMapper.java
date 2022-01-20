@@ -20,8 +20,6 @@ public interface SandboxInfoMapper extends ParentMapper {
 
     List<SandboxAnswersDto> mapToAnswers(Set<SandboxAnswer> sandboxAnswerSet);
 
-    SandboxAnswer mapToAnswersDto(SandboxInfo sandboxInfo);
-
     SandboxInfo mapCreateDtoToEntity(SandboxInfoCreateDto sandboxInfoCreateDto);
 
     default PageResultResource<SandboxInfoDto> mapToPageResultResource(Page<SandboxInfo> objects) {
