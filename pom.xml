@@ -2,19 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
 
     <groupId>cz.muni.ics.kypo</groupId>
     <artifactId>kypo-answers-storage</artifactId>
     <version>1.0.8</version>
-
     <name>kypo-answers-storage</name>
     <description>Project for answers from sandboxes</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.6.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
     <properties>
         <java.version>11</java.version>
@@ -22,32 +22,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <proprietary-repo-id>gitlab-maven</proprietary-repo-id>
 
-        <maven.compiler.version>3.8.1</maven.compiler.version>
-        <javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
-
-        <!-- mapstruct version -->
-        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
-
-        <!-- rest API documentation generation -->
-        <github.kongchen.version>3.1.8</github.kongchen.version>
-        <!-- library to generate sha256 from sub and issuer -->
-        <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
         <!--swagger doc generation -->
-        <springfox.version>3.0.0</springfox.version>
+        <swagger.version>2.9.2</swagger.version>
         <swagger.directory>${basedir}/doc-files</swagger.directory>
         <swagger.skip>true</swagger.skip>
         <swagger.host>localhost:8087</swagger.host>
-        <!-- end swagger doc generation-->
 
-        <spring-web.version>5.3.8</spring-web.version>
-        <spring-cloud.version>2020.0.3</spring-cloud.version>
-
-        <!--tests-->
-        <junit.version>4.13.2</junit.version>
-        <!-- dependency management-->
-        <guava.version>20.0</guava.version>
-        <javassist.version>3.27.0-GA</javassist.version>
-
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <github.kongchen.version>3.1.8</github.kongchen.version>
+        <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
         <!-- added to avoid log4j2 vulnerability CVE-2021-44228 -->
         <log4j2.version>2.15.0</log4j2.version>
     </properties>
@@ -59,35 +42,11 @@
         </repository>
     </repositories>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>${javassist.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring-web.version}</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--SPRING BOOT STARTERS-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,40 +61,21 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--Swagger tools for generating REST API documentation -->
+        <!--COMPILE (DEFAULT SCOPE)-->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.mapstruct</groupId>
-                    <artifactId>mapstruct</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
-        <!--End Swagger tools-->
-        <!-- mapstruct for mapping entities to dto -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
         <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>${javax.ws.rs-api.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-        <!-- Query DSL -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
@@ -145,18 +85,14 @@
             <artifactId>querydsl-apt</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+        </dependency>
+        <!--RUNTIME-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -169,7 +105,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.version}</version>
                 <configuration>
                     <release>${java.version}</release>
                     <annotationProcessorPaths>
@@ -202,7 +137,6 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flyway.version}</version>
             </plugin>
             <plugin>
                 <groupId>com.github.kongchen</groupId>
@@ -240,5 +174,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

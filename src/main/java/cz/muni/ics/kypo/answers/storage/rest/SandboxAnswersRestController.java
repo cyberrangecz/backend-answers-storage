@@ -1,6 +1,6 @@
 package cz.muni.ics.kypo.answers.storage.rest;
 
-import cz.muni.ics.kypo.answers.storage.api.SandboxAnswersDto;
+import com.querydsl.core.types.Predicate;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
@@ -16,10 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import com.querydsl.core.types.Predicate;
-
-import java.util.List;
 
 @Api(value = "Endpoint for KYPO Sandbox Answers", tags = "sandboxes")
 @RestController
@@ -57,14 +53,14 @@ public class SandboxAnswersRestController {
     })
     @GetMapping(path = "/{sandboxRefId}/answers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SandboxInfoDto> findAnswersForParticularSandbox(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
-                                                                                   @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
+                                                                          @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
         return ResponseEntity.ok(sandboxAnswersService.getSandboxAnswersBySandboxRefId(sandboxRefId));
     }
 
     /**
      * Get answer for particular sandbox and by answer variable name.
      *
-     * @param sandboxRefId id of a sandbox.
+     * @param sandboxRefId       id of a sandbox.
      * @param answerVariableName variable name of an answer.
      * @return the content of the answer.
      */
@@ -80,9 +76,9 @@ public class SandboxAnswersRestController {
     })
     @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> findAnswerBySandboxAndVariableName(@ApiParam(value = "ID sandbox for that we store answers.", required = true)
-                                                                                   @PathVariable(value = "sandboxRefId") Long sandboxRefId,
-                                                                                   @ApiParam(value = "Variable name of the answer.", required = true)
-                                                                                   @PathVariable(value = "answerVariableName") String answerVariableName) {
+                                                                     @PathVariable(value = "sandboxRefId") Long sandboxRefId,
+                                                                     @ApiParam(value = "Variable name of the answer.", required = true)
+                                                                     @PathVariable(value = "answerVariableName") String answerVariableName) {
         return ResponseEntity.ok(sandboxAnswersService.getAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName));
     }
 
