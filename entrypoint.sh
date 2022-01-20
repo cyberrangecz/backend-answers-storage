@@ -37,4 +37,4 @@ do
     wait_for_it ${i}
 done
 
-exec /usr/bin/supervisord -c /app/supervisord.conf
+exec java -Dspring.config.location=/app/etc/kypo-answers-storage.properties -jar /app/kypo-answers-storage.jar
