@@ -1,3 +1,4 @@
+2.0.0 Migrate project to Java 17.
 1.0.9 Updated dependencies to the latest versions. Code cleanup. Configured multistage docker build to decrease the resulting image size.
 1.0.8 Update log4j2 version to avoid CVE-2021-44228 vulnerability
 1.0.7 Return SandboxInfoDTO in findAnswersForParticularSandbox endpoint.
