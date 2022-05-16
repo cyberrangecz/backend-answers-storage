@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(value = "Endpoint for KYPO Sandbox Answers", tags = "sandboxes")
 @RestController
 @RequestMapping(path = "/sandboxes")
@@ -117,7 +119,7 @@ public class SandboxAnswersRestController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> storeAnswersForParticularSandbox(@RequestBody SandboxInfoCreateDto sandboxInfoCreateDto) {
+    public ResponseEntity<Void> storeAnswersForParticularSandbox(@RequestBody @Valid SandboxInfoCreateDto sandboxInfoCreateDto) {
         sandboxAnswersService.storeAllAnswersForSandbox(sandboxInfoCreateDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
