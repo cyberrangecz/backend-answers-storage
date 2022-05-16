@@ -3,6 +3,7 @@ package cz.muni.ics.kypo.answers.storage.api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class SandboxInfoCreateDto {
 
     @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "12")
     private Long sandboxRefId;
+    @Valid
     @ApiModelProperty(value = "The answers for given sandbox")
     private List<SandboxAnswersCreateDto> sandboxAnswers = new ArrayList<>();
 
