@@ -14,8 +14,12 @@ public class SandboxInfo implements Serializable {
     @SequenceGenerator(name = "sandbox_info_generator", sequenceName = "sandbox_info_id_seq")
     @Column(name = "sandbox_info_id", nullable = false, unique = true)
     private Long id;
-    @Column(name = "sandbox_ref_id", nullable = false, unique = true)
+    @Column(name = "sandbox_ref_id")
     private Long sandboxRefId;
+    @Column(name = "access_token")
+    private String accessToken;
+    @Column(name = "user_id")
+    private Long userId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sandboxInfo",
             cascade = CascadeType.ALL)
     private Set<SandboxAnswer> sandboxAnswers = new HashSet<>();
@@ -44,11 +48,29 @@ public class SandboxInfo implements Serializable {
         this.sandboxAnswers = sandboxAnswers;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "SandboxInfo{" +
                 "id=" + id +
                 ", sandboxRefId=" + sandboxRefId +
+                ", userId=" + userId +
+                ", accessToken='" + accessToken + '\'' +
                 '}';
     }
 }

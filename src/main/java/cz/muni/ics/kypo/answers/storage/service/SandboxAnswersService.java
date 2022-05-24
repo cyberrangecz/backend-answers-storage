@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,11 +38,19 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public SandboxInfoDto getSandboxAnswersBySandboxRefId(Long sandboxRefId) {
-        SandboxInfo sandboxInfo = sandboxInfoRepository.findByRefId(sandboxRefId)
+    public SandboxInfoDto getSandboxAnswers(Long sandboxRefId) {
+        SandboxInfo sandboxInfo = sandboxInfoRepository.findBySandboxRefId(sandboxRefId)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", sandboxRefId.getClass(), sandboxRefId)));
         Set<SandboxAnswer> sandboxAnswerDtoSet = sandboxInfo.getSandboxAnswers();
         return new SandboxInfoDto(sandboxRefId, sandboxInfoMapper.mapToAnswers(sandboxAnswerDtoSet));
+    }
+
+    @Transactional(readOnly = true)
+    public SandboxInfoDto getSandboxAnswers(String accessToken, Long userId) {
+        SandboxInfo sandboxInfo = sandboxInfoRepository.findByAccessTokenAndUserIdId(accessToken, userId)
+                .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", userId.getClass(), userId)));
+        Set<SandboxAnswer> sandboxAnswerDtoSet = sandboxInfo.getSandboxAnswers();
+        return new SandboxInfoDto(accessToken, userId, sandboxInfoMapper.mapToAnswers(sandboxAnswerDtoSet));
     }
 
     @Transactional(readOnly = true)
@@ -52,13 +61,24 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
+    public String getAnswerBySandboxAndVariableName(String accessToken, Long userId, String answerVariableName) {
+        return sandboxAnswerRepository.findAnswerBySandboxAndVariableName(accessToken, userId, answerVariableName)
+                .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxAnswer.class, "variable name", answerVariableName.getClass(), answerVariableName)))
+                .getAnswerContent();
+    }
+
+    @Transactional(readOnly = true)
     public PageResultResource<SandboxInfoDto> getAllSandboxesAnswers(Predicate predicate, Pageable pageable) {
         Page<SandboxInfo> sandboxInfo = sandboxInfoRepository.findAll(predicate, pageable);
         return sandboxInfoMapper.mapToPageResultResource(sandboxInfo);
     }
 
-    public void deleteSandboxWithAnswers(Long sandboxRefId) {
+    public void deleteCloudSandboxReferenceWithAnswers(Long sandboxRefId) {
         sandboxInfoRepository.deleteBySandboxRefId(sandboxRefId);
+    }
+
+    public void deleteLocalSandboxReferenceWithAnswers(String accessToken, Long userId) {
+        sandboxInfoRepository.deleteByAccessTokenAndUserId(accessToken, userId);
     }
 
     public void storeAllAnswersForSandbox(SandboxInfoCreateDto sandboxInfoCreateDto) {
