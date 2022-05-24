@@ -14,5 +14,12 @@ public interface SandboxAnswerRepository extends JpaRepository<SandboxAnswer, Lo
 
     @Query("SELECT sa FROM SandboxInfo si INNER JOIN si.sandboxAnswers sa WHERE " +
             "si.sandboxRefId = :sandboxRefId AND sa.answerVariableName = :answerVariableName")
-    Optional<SandboxAnswer> findAnswerBySandboxAndVariableName(@Param("sandboxRefId") Long sandboxRefId, @Param("answerVariableName") String answerVariableName);
+    Optional<SandboxAnswer> findAnswerBySandboxAndVariableName(@Param("sandboxRefId") Long sandboxRefId,
+                                                               @Param("answerVariableName") String answerVariableName);
+
+    @Query("SELECT sa FROM SandboxInfo si INNER JOIN si.sandboxAnswers sa WHERE " +
+            "si.accessToken = :accessToken AND si.userId = :userId AND sa.answerVariableName = :answerVariableName")
+    Optional<SandboxAnswer> findAnswerBySandboxAndVariableName(@Param("accessToken") String accessToken,
+                                                               @Param("userId") Long userId,
+                                                               @Param("answerVariableName") String answerVariableName);
 }
