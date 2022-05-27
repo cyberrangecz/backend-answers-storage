@@ -1,3 +1,4 @@
+2.0.1 Modify config of swagger documentation, DB size of answer column changed to 2048, storage of answers for local sandboxes.
 2.0.0 Migrate project to Java 17.
 1.0.9 Updated dependencies to the latest versions. Code cleanup. Configured multistage docker build to decrease the resulting image size.
 1.0.8 Update log4j2 version to avoid CVE-2021-44228 vulnerability
