@@ -30,4 +30,8 @@ public interface SandboxInfoRepository extends JpaRepository<SandboxInfo, Long>,
 
     void deleteByAccessTokenAndUserId(String accessToken, Long userId);
 
+    boolean existsBySandboxRefId(Long sandboxRefId);
+
+    boolean existsByUserIdAndAccessToken(Long userId, String accessToken);
+
 }

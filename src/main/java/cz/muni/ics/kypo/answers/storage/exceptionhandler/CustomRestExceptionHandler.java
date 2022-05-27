@@ -2,6 +2,7 @@ package cz.muni.ics.kypo.answers.storage.exceptionhandler;
 
 
 import cz.muni.ics.kypo.answers.storage.exceptions.BadRequestException;
+import cz.muni.ics.kypo.answers.storage.exceptions.EntityConflictException;
 import cz.muni.ics.kypo.answers.storage.exceptions.EntityNotFoundException;
 import cz.muni.ics.kypo.answers.storage.exceptions.InternalServerErrorException;
 import cz.muni.ics.kypo.answers.storage.exceptions.errors.ApiEntityError;
@@ -221,6 +222,17 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         final ApiEntityError apiError = ApiEntityError.of(
                 EntityNotFoundException.class.getAnnotation(ResponseStatus.class).value(),
                 EntityNotFoundException.class.getAnnotation(ResponseStatus.class).reason(),
+                getFullStackTrace(ex),
+                URL_PATH_HELPER.getRequestUri(req),
+                ex.getEntityErrorDetail());
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({EntityConflictException.class})
+    public ResponseEntity<Object> handleEntityConflictException(final EntityConflictException ex, final WebRequest request, HttpServletRequest req) {
+        final ApiEntityError apiError = ApiEntityError.of(
+                EntityConflictException.class.getAnnotation(ResponseStatus.class).value(),
+                EntityConflictException.class.getAnnotation(ResponseStatus.class).reason(),
                 getFullStackTrace(ex),
                 URL_PATH_HELPER.getRequestUri(req),
                 ex.getEntityErrorDetail());
