@@ -4,19 +4,23 @@ import com.querydsl.core.types.Predicate;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoCreateDto;
 import cz.muni.ics.kypo.answers.storage.api.SandboxInfoDto;
 import cz.muni.ics.kypo.answers.storage.api.reponses.PageResultResource;
+import cz.muni.ics.kypo.answers.storage.data.entities.QSandboxInfo;
 import cz.muni.ics.kypo.answers.storage.data.entities.SandboxAnswer;
 import cz.muni.ics.kypo.answers.storage.data.entities.SandboxInfo;
 import cz.muni.ics.kypo.answers.storage.data.repositories.SandboxAnswerRepository;
 import cz.muni.ics.kypo.answers.storage.data.repositories.SandboxInfoRepository;
+import cz.muni.ics.kypo.answers.storage.exceptions.EntityConflictException;
 import cz.muni.ics.kypo.answers.storage.exceptions.EntityErrorDetail;
 import cz.muni.ics.kypo.answers.storage.exceptions.EntityNotFoundException;
 import cz.muni.ics.kypo.answers.storage.mappers.SandboxInfoMapper;
+import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Optional;
 import java.util.Set;
 
@@ -82,9 +86,21 @@ public class SandboxAnswersService {
     }
 
     public void storeAllAnswersForSandbox(SandboxInfoCreateDto sandboxInfoCreateDto) {
+        checkExistenceOfSandboxInfo(sandboxInfoCreateDto);
         SandboxInfo sandboxInfo = sandboxInfoMapper.mapCreateDtoToEntity(sandboxInfoCreateDto);
         sandboxInfo.getSandboxAnswers().forEach(sandboxAnswer -> sandboxAnswer.setSandboxInfo(sandboxInfo));
         sandboxInfoRepository.save(sandboxInfo);
+    }
+
+    private void checkExistenceOfSandboxInfo(SandboxInfoCreateDto sandboxInfo) {
+        if (sandboxInfo.getSandboxRefId() != null && sandboxInfoRepository.existsBySandboxRefId(sandboxInfo.getSandboxRefId())) {
+            throw new EntityConflictException(new EntityErrorDetail(SandboxInfo.class,
+                    "Answers for the cloud sandbox (sandboxRefId: " + sandboxInfo.getSandboxRefId() + ") have been already created."));
+        }
+        if (sandboxInfo.getSandboxRefId() == null && sandboxInfoRepository.existsByUserIdAndAccessToken(sandboxInfo.getUserId(), sandboxInfo.getAccessToken())) {
+            throw new EntityConflictException(new EntityErrorDetail(SandboxInfo.class,
+                    "Answers for the local sandbox (userId: " + sandboxInfo.getUserId() + ", accessToken: " + sandboxInfo.getAccessToken() + ") have been already created."));
+        }
     }
 
 }
