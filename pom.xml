@@ -88,6 +88,11 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.kongchen</groupId>
+            <artifactId>swagger-maven-plugin</artifactId>
+            <version>${github.kongchen.version}</version>
+        </dependency>
         <!--RUNTIME-->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -160,6 +165,7 @@
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
                             <swaggerFileName>kypo-answers-storage-swagger-open-api</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
+                            <swaggerApiReader>cz.muni.ics.kypo.answers.storage.utils.SnakeCaseSwaggerReader</swaggerApiReader>
                         </apiSource>
                     </apiSources>
                 </configuration>

@@ -132,7 +132,7 @@ definitions:
     - $ref: "#/definitions/ApiError"
     - type: "object"
       properties:
-        entityErrorDetail:
+        entity_error_detail:
           description: "Detail of the entity which is related to the error."
           $ref: "#/definitions/EntityErrorDetail"
       description: "A detailed error information related to the entity."
@@ -245,7 +245,7 @@ definitions:
         type: "string"
         example: "id"
         description: "Identifier of the entity."
-      identifierValue:
+      identifier_value:
         type: "object"
         example: "1"
         description: "Value of the identifier."
@@ -256,34 +256,34 @@ definitions:
   SandboxAnswersCreateDto:
     type: "object"
     properties:
-      answerContent:
+      answer_content:
         type: "string"
         example: "nmap 192.168.0.1"
         description: "The content of the KYPO answer in particular (phase/level)"
-      answerVariableName:
+      answer_variable_name:
         type: "string"
         example: "sandbox-1-2-answer"
         description: "The variable name of the KYPO answer"
   SandboxAnswersDto:
     type: "object"
     properties:
-      answerContent:
+      answer_content:
         type: "string"
         example: "nmap 192.168.0.1"
         description: "The content of the KYPO answer in particular (phase/level)"
-      answerVariableName:
+      answer_variable_name:
         type: "string"
         example: "sandbox-1-2-answer"
         description: "The variable name of the KYPO answer"
   SandboxInfoCreateDto:
     type: "object"
     properties:
-      sandboxRefId:
+      sandbox_ref_id:
         type: "integer"
         format: "int64"
         example: 12
         description: "The identifier of a sandbox for that we store the answers"
-      sandboxAnswers:
+      sandbox_answers:
         type: "array"
         description: "The answers for given sandbox"
         items:
@@ -291,12 +291,12 @@ definitions:
   SandboxInfoDto:
     type: "object"
     properties:
-      sandboxRefId:
+      sandbox_ref_id:
         type: "integer"
         format: "int64"
         example: 12
         description: "The identifier of a sandbox for that we store the answers"
-      sandboxAnswers:
+      sandbox_answers:
         type: "array"
         description: "The answers for given sandbox"
         items:

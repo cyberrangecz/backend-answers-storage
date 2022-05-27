@@ -1,18 +1,26 @@
 package cz.muni.ics.kypo.answers.storage.api;
 
+import cz.muni.ics.kypo.answers.storage.validation.ValidSandboxIdentifier;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @ApiModel(
         value = "SandboxInfoCreateDto"
 )
+@ValidSandboxIdentifier
 public class SandboxInfoCreateDto {
 
     @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "12")
     private Long sandboxRefId;
+    @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "12")
+    private String accessToken;
+    @ApiModelProperty(value = "The identifier of the user who possess the local sandbox.", example = "12")
+    private Long userId;
+    @Valid
     @ApiModelProperty(value = "The answers for given sandbox")
     private List<SandboxAnswersCreateDto> sandboxAnswers = new ArrayList<>();
 
@@ -22,6 +30,22 @@ public class SandboxInfoCreateDto {
 
     public void setSandboxRefId(Long sandboxRefId) {
         this.sandboxRefId = sandboxRefId;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public List<SandboxAnswersCreateDto> getSandboxAnswers() {
@@ -34,9 +58,10 @@ public class SandboxInfoCreateDto {
 
     @Override
     public String toString() {
-        return "SandboxInfoCreateDto{" +
+        return "CloudSandboxInfoCreateDto{" +
                 "sandboxRefId=" + sandboxRefId +
-                ", sandboxAnswers=" + sandboxAnswers +
+                ", accessToken='" + accessToken + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }
