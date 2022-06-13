@@ -76,7 +76,7 @@ public class SandboxAnswersRestController {
             @ApiResponse(code = 200, message = "The answers for particular local sandbox were found.", response = SandboxInfoDto.class),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
-    @GetMapping(path = "/access-token/{accessToken}/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/access-tokens/{accessToken}/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SandboxInfoDto> findAnswersForParticularLocalSandbox(
             @ApiParam(value = "Token of the training instance in which the local sandbox is used.", required = true) @PathVariable("accessToken") String accessToken,
             @ApiParam(value = "ID of the user whose local sandbox to delete.", required = true) @PathVariable("userId") Long userId) {
