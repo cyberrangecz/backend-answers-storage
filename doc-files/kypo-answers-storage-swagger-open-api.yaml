@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.1"
+  version: "Version: 2.0.2"
   title: "KYPO Answers Storage - API Reference"
 host: "localhost:8087"
 basePath: "/kypo-rest-answers-storage/api/v1"
@@ -51,7 +51,7 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /sandboxes/access-token/{accessToken}/users/{userId}:
+  /sandboxes/access-tokens/{accessToken}/users/{userId}:
     get:
       tags:
       - "sandboxes"
@@ -82,7 +82,6 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /sandboxes/access-tokens/{accessToken}/users/{userId}:
     delete:
       tags:
       - "sandboxes"
