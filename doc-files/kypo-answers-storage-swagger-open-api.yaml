@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.0"
+  version: "Version: 2.0.2"
   title: "KYPO Answers Storage - API Reference"
 host: "localhost:8087"
 basePath: "/kypo-rest-answers-storage/api/v1"
@@ -51,64 +51,83 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /sandboxes/{sandboxRefId}:
-    delete:
-      tags:
-      - "sandboxes"
-      summary: "Delete sandbox_ref with all answers."
-      description: ""
-      operationId: "deleteSandboxWithAnswers"
-      parameters:
-      - name: "sandboxRefId"
-        in: "path"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        204:
-          description: "The sandbox with answers was successfully deleted."
-        500:
-          description: "Unexpected condition was encountered."
-          schema:
-            $ref: "#/definitions/ApiError"
-  /sandboxes/{sandboxRefId}/answers:
+  /sandboxes/access-tokens/{accessToken}/users/{userId}:
     get:
       tags:
       - "sandboxes"
-      summary: "Get answers for sandbox."
+      summary: "Get answers for local sandbox."
       description: ""
-      operationId: "findTrainingDefinitionById"
+      operationId: "findAnswersForParticularLocalSandbox"
       produces:
       - "application/json"
       parameters:
-      - name: "sandboxRefId"
+      - name: "accessToken"
         in: "path"
-        description: "ID sandbox for that we store answers."
+        description: "Token of the training instance in which the local sandbox is\
+          \ used."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "ID of the user whose local sandbox to delete."
         required: true
         type: "integer"
         format: "int64"
       responses:
         200:
-          description: "The answers for particular sandbox were found."
+          description: "The answers for particular local sandbox were found."
           schema:
             $ref: "#/definitions/SandboxInfoDto"
         500:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /sandboxes/{sandboxRefId}/answers/{answerVariableName}:
+    delete:
+      tags:
+      - "sandboxes"
+      summary: "Delete local sandbox reference with all answers."
+      description: ""
+      operationId: "deleteLocalSandboxReferenceWithAnswers"
+      parameters:
+      - name: "accessToken"
+        in: "path"
+        description: "Token of the training instance in which the local sandbox is\
+          \ used."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "ID of the user whose local sandbox to delete."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "The local sandbox reference with answers was successfully\
+            \ deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /sandboxes/access-tokens/{accessToken}/users/{userId}/answers/{answerVariableName}:
     get:
       tags:
       - "sandboxes"
-      summary: "Get answer for particular sandbox and by answer variable name."
+      summary: "Get answer for particular local sandbox and by answer variable name."
       description: ""
-      operationId: "findAnswerBySandboxAndVariableName"
+      operationId: "findAnswerByLocalSandboxAndVariableName"
       produces:
       - "application/json"
       parameters:
-      - name: "sandboxRefId"
+      - name: "accessToken"
         in: "path"
-        description: "ID sandbox for that we store answers."
+        description: "Token of the training instance in which the local sandbox is\
+          \ used."
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "ID of the user whose local sandbox to delete."
         required: true
         type: "integer"
         format: "int64"
@@ -119,9 +138,88 @@ paths:
         type: "string"
       responses:
         200:
-          description: "The answer for particular sandbox and by identifier was found."
+          description: "The answer for particular local sandbox and by identifier\
+            \ was found."
+          schema:
+            type: "string"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /sandboxes/{sandboxRefId}:
+    delete:
+      tags:
+      - "sandboxes"
+      summary: "Delete cloud sandbox reference with all answers."
+      description: ""
+      operationId: "deleteCloudSandboxReferenceWithAnswers"
+      parameters:
+      - name: "sandboxRefId"
+        in: "path"
+        description: "ID of the user whose cloud sandbox to delete."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "The cloud sandbox reference with answers was successfully\
+            \ deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /sandboxes/{sandboxRefId}/answers:
+    get:
+      tags:
+      - "sandboxes"
+      summary: "Get answers for cloud sandbox."
+      description: ""
+      operationId: "findAnswersForParticularCloudSandbox"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sandboxRefId"
+        in: "path"
+        description: "ID sandbox for that we store answers."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "The answers for particular cloud sandbox were found."
           schema:
             $ref: "#/definitions/SandboxInfoDto"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /sandboxes/{sandboxRefId}/answers/{answerVariableName}:
+    get:
+      tags:
+      - "sandboxes"
+      summary: "Get answer for particular cloud sandbox and by answer variable name."
+      description: ""
+      operationId: "findAnswerByCloudSandboxAndVariableName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sandboxRefId"
+        in: "path"
+        description: "ID of sandbox for that we store answers."
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "answerVariableName"
+        in: "path"
+        description: "Variable name of the answer."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "The answer for particular cloud sandbox and by identifier\
+            \ was found."
+          schema:
+            type: "string"
         500:
           description: "Unexpected condition was encountered."
           schema:
@@ -260,10 +358,14 @@ definitions:
         type: "string"
         example: "nmap 192.168.0.1"
         description: "The content of the KYPO answer in particular (phase/level)"
+        minLength: 0
+        maxLength: 2048
       answer_variable_name:
         type: "string"
         example: "sandbox-1-2-answer"
         description: "The variable name of the KYPO answer"
+        minLength: 0
+        maxLength: 255
   SandboxAnswersDto:
     type: "object"
     properties:
@@ -283,6 +385,16 @@ definitions:
         format: "int64"
         example: 12
         description: "The identifier of a sandbox for that we store the answers"
+      access_token:
+        type: "string"
+        example: "12"
+        description: "The identifier of the training instance in which the local sandbox\
+          \ is/has been used."
+      user_id:
+        type: "integer"
+        format: "int64"
+        example: 12
+        description: "The identifier of the user who possess the local sandbox."
       sandbox_answers:
         type: "array"
         description: "The answers for given sandbox"
@@ -296,6 +408,16 @@ definitions:
         format: "int64"
         example: 12
         description: "The identifier of a sandbox for that we store the answers"
+      access_token:
+        type: "string"
+        example: "12"
+        description: "The identifier of the training instance in which the local sandbox\
+          \ is/has been used."
+      user_id:
+        type: "integer"
+        format: "int64"
+        example: 12
+        description: "The identifier of the user who possess the local sandbox."
       sandbox_answers:
         type: "array"
         description: "The answers for given sandbox"
