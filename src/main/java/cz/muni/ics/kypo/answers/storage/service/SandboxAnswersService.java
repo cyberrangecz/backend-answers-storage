@@ -42,7 +42,7 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public SandboxInfoDto getSandboxAnswers(Long sandboxRefId) {
+    public SandboxInfoDto getSandboxAnswers(String sandboxRefId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findBySandboxRefId(sandboxRefId)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxInfo.class, "id", sandboxRefId.getClass(), sandboxRefId)));
         Set<SandboxAnswer> sandboxAnswerDtoSet = sandboxInfo.getSandboxAnswers();
@@ -58,7 +58,7 @@ public class SandboxAnswersService {
     }
 
     @Transactional(readOnly = true)
-    public String getAnswerBySandboxAndVariableName(Long sandboxRefId, String answerVariableName) {
+    public String getAnswerBySandboxAndVariableName(String sandboxRefId, String answerVariableName) {
         return sandboxAnswerRepository.findAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName)
                 .orElseThrow(() -> new EntityNotFoundException(new EntityErrorDetail(SandboxAnswer.class, "variable name", answerVariableName.getClass(), answerVariableName)))
                 .getAnswerContent();
@@ -77,7 +77,7 @@ public class SandboxAnswersService {
         return sandboxInfoMapper.mapToPageResultResource(sandboxInfo);
     }
 
-    public void deleteCloudSandboxReferenceWithAnswers(Long sandboxRefId) {
+    public void deleteCloudSandboxReferenceWithAnswers(String sandboxRefId) {
         sandboxInfoRepository.deleteBySandboxRefId(sandboxRefId);
     }
 

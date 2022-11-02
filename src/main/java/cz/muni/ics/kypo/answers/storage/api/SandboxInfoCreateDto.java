@@ -15,7 +15,7 @@ import java.util.List;
 public class SandboxInfoCreateDto {
 
     @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "12")
-    private Long sandboxRefId;
+    private String sandboxRefId;
     @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "12")
     private String accessToken;
     @ApiModelProperty(value = "The identifier of the user who possess the local sandbox.", example = "12")
@@ -24,11 +24,11 @@ public class SandboxInfoCreateDto {
     @ApiModelProperty(value = "The answers for given sandbox")
     private List<SandboxAnswersCreateDto> sandboxAnswers = new ArrayList<>();
 
-    public Long getSandboxRefId() {
+    public String getSandboxRefId() {
         return sandboxRefId;
     }
 
-    public void setSandboxRefId(Long sandboxRefId) {
+    public void setSandboxRefId(String sandboxRefId) {
         this.sandboxRefId = sandboxRefId;
     }
 

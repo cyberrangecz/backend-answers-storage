@@ -15,7 +15,7 @@ public class SandboxInfo implements Serializable {
     @Column(name = "sandbox_info_id", nullable = false, unique = true)
     private Long id;
     @Column(name = "sandbox_ref_id")
-    private Long sandboxRefId;
+    private String sandboxRefId;
     @Column(name = "access_token")
     private String accessToken;
     @Column(name = "user_id")
@@ -32,11 +32,11 @@ public class SandboxInfo implements Serializable {
         this.id = id;
     }
 
-    public Long getSandboxRefId() {
+    public String getSandboxRefId() {
         return sandboxRefId;
     }
 
-    public void setSandboxRefId(Long sandboxRefId) {
+    public void setSandboxRefId(String sandboxRefId) {
         this.sandboxRefId = sandboxRefId;
     }
 
