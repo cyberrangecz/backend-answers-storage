@@ -55,7 +55,7 @@ public class SandboxAnswersRestController {
     })
     @GetMapping(path = "/{sandboxRefId}/answers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SandboxInfoDto> findAnswersForParticularCloudSandbox(
-            @ApiParam(value = "ID sandbox for that we store answers.", required = true) @PathVariable(value = "sandboxRefId") Long sandboxRefId) {
+            @ApiParam(value = "ID sandbox for that we store answers.", required = true) @PathVariable(value = "sandboxRefId") String sandboxRefId) {
         return ResponseEntity.ok(sandboxAnswersService.getSandboxAnswers(sandboxRefId));
     }
 
@@ -102,7 +102,7 @@ public class SandboxAnswersRestController {
     })
     @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> findAnswerByCloudSandboxAndVariableName(
-            @ApiParam(value = "ID of sandbox for that we store answers.", required = true) @PathVariable(value = "sandboxRefId") Long sandboxRefId,
+            @ApiParam(value = "ID of sandbox for that we store answers.", required = true) @PathVariable(value = "sandboxRefId") String sandboxRefId,
             @ApiParam(value = "Variable name of the answer.", required = true) @PathVariable(value = "answerVariableName") String answerVariableName) {
         return ResponseEntity.ok(sandboxAnswersService.getAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName));
     }
@@ -188,7 +188,7 @@ public class SandboxAnswersRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{sandboxRefId}")
     public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
-            @ApiParam(value = "ID of the user whose cloud sandbox to delete.", required = true) @PathVariable("sandboxRefId") Long sandboxRefId) {
+            @ApiParam(value = "ID of the user whose cloud sandbox to delete.", required = true) @PathVariable("sandboxRefId") String sandboxRefId) {
         sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(sandboxRefId);
         return ResponseEntity.noContent().build();
     }
