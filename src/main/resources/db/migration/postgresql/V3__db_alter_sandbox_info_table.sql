@@ -4,6 +4,7 @@ ALTER TABLE sandbox_info ALTER COLUMN sandbox_ref_id DROP NOT NULL;;
 
 ALTER TABLE sandbox_info ADD COLUMN user_id int8 default (null);
 ALTER TABLE sandbox_info ADD COLUMN  access_token varchar(63) default (null);
+ALTER TABLE sandbox_info ALTER COLUMN sandbox_ref_id TYPE varchar(36);
 
 CREATE UNIQUE INDEX sandbox_ref_id_index ON sandbox_info (sandbox_ref_id)
     WHERE sandbox_info.access_token IS NULL AND sandbox_info.user_id IS NULL;
