@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.3"
+  version: "Version: 22.12-rc.1"
   title: "KYPO Answers Storage - API Reference"
 host: "localhost:8087"
 basePath: "/kypo-rest-answers-storage/api/v1"
@@ -158,8 +158,7 @@ paths:
         in: "path"
         description: "ID of the user whose cloud sandbox to delete."
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
         204:
           description: "The cloud sandbox reference with answers was successfully\
@@ -182,8 +181,7 @@ paths:
         in: "path"
         description: "ID sandbox for that we store answers."
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
         200:
           description: "The answers for particular cloud sandbox were found."
@@ -207,8 +205,7 @@ paths:
         in: "path"
         description: "ID of sandbox for that we store answers."
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       - name: "answerVariableName"
         in: "path"
         description: "Variable name of the answer."
@@ -381,9 +378,8 @@ definitions:
     type: "object"
     properties:
       sandbox_ref_id:
-        type: "integer"
-        format: "int64"
-        example: 12
+        type: "string"
+        example: "12"
         description: "The identifier of a sandbox for that we store the answers"
       access_token:
         type: "string"
@@ -404,9 +400,8 @@ definitions:
     type: "object"
     properties:
       sandbox_ref_id:
-        type: "integer"
-        format: "int64"
-        example: 12
+        type: "string"
+        example: "12"
         description: "The identifier of a sandbox for that we store the answers"
       access_token:
         type: "string"
