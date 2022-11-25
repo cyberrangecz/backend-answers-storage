@@ -5,7 +5,7 @@
 
     <groupId>cz.muni.ics.kypo</groupId>
     <artifactId>kypo-answers-storage</artifactId>
-    <version>2.0.3</version>
+    <version>22.12-rc.1</version>
     <name>kypo-answers-storage</name>
     <description>Project for answers from sandboxes</description>
 
