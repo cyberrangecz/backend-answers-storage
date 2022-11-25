@@ -1,0 +1,1 @@
+ALTER TABLE sandbox_info ALTER COLUMN sandbox_ref_id TYPE varchar(36);

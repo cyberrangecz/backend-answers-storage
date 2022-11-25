@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface SandboxInfoRepository extends JpaRepository<SandboxInfo, Long>, QuerydslPredicateExecutor<SandboxInfo> {
 
     @Query("SELECT si FROM SandboxInfo si JOIN FETCH si.sandboxAnswers WHERE si.sandboxRefId = :sandboxRefId")
-    Optional<SandboxInfo> findBySandboxRefId(@Param("sandboxRefId") Long sandboxRefId);
+    Optional<SandboxInfo> findBySandboxRefId(@Param("sandboxRefId") String sandboxRefId);
 
     @Query("SELECT si FROM SandboxInfo si JOIN FETCH si.sandboxAnswers WHERE si.accessToken = :accessToken AND si.userId = :userId")
     Optional<SandboxInfo> findByAccessTokenAndUserIdId(@Param("accessToken") String accessToken,
@@ -26,11 +26,11 @@ public interface SandboxInfoRepository extends JpaRepository<SandboxInfo, Long>,
     @EntityGraph(attributePaths = {"sandboxAnswers"})
     Page<SandboxInfo> findAll(Predicate predicate, Pageable pageable);
 
-    void deleteBySandboxRefId(Long sandboxRefId);
+    void deleteBySandboxRefId(String sandboxRefId);
 
     void deleteByAccessTokenAndUserId(String accessToken, Long userId);
 
-    boolean existsBySandboxRefId(Long sandboxRefId);
+    boolean existsBySandboxRefId(String sandboxRefId);
 
     boolean existsByUserIdAndAccessToken(Long userId, String accessToken);
 
