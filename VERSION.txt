@@ -1,3 +1,4 @@
+22.12-rc.1 Changed sandboxId type to string.
 2.0.3 Removed stacktrace from errors.
 2.0.2 Modify URL of method to obtain answers for local sandbox.
 2.0.1 Modify config of swagger documentation, DB size of answer column changed to 2048, storage of answers for local sandboxes.
