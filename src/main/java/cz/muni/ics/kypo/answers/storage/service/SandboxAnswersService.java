@@ -81,6 +81,11 @@ public class SandboxAnswersService {
         sandboxInfoRepository.deleteBySandboxRefId(sandboxRefId);
     }
 
+    public void deleteCloudSandboxReferenceWithAnswers(Long allocationId) {
+        sandboxInfoRepository.deleteByAllocationId(allocationId);
+    }
+
+
     public void deleteLocalSandboxReferenceWithAnswers(String accessToken, Long userId) {
         sandboxInfoRepository.deleteByAccessTokenAndUserId(accessToken, userId);
     }
