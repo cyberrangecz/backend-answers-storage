@@ -7,6 +7,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "sandbox_info")
+@NamedQueries({
+        @NamedQuery(
+                name = "SandboxInfo.deleteByAllocationId",
+                query = "DELETE FROM SandboxInfo si WHERE si.allocationId = :allocationId"
+        )
+})
 public class SandboxInfo implements Serializable {
 
     @Id
@@ -16,6 +22,8 @@ public class SandboxInfo implements Serializable {
     private Long id;
     @Column(name = "sandbox_ref_id")
     private String sandboxRefId;
+    @Column(name = "allocation_id")
+    private Long allocationId;
     @Column(name = "access_token")
     private String accessToken;
     @Column(name = "user_id")
@@ -38,6 +46,14 @@ public class SandboxInfo implements Serializable {
 
     public void setSandboxRefId(String sandboxRefId) {
         this.sandboxRefId = sandboxRefId;
+    }
+
+    public Long getAllocationId() {
+        return allocationId;
+    }
+
+    public void setAllocationId(Long allocationId) {
+        this.allocationId = allocationId;
     }
 
     public Set<SandboxAnswer> getSandboxAnswers() {
@@ -69,6 +85,7 @@ public class SandboxInfo implements Serializable {
         return "SandboxInfo{" +
                 "id=" + id +
                 ", sandboxRefId=" + sandboxRefId +
+                ", allocationId=" + allocationId +
                 ", userId=" + userId +
                 ", accessToken='" + accessToken + '\'' +
                 '}';

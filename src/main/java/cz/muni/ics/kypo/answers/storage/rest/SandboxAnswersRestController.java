@@ -174,10 +174,10 @@ public class SandboxAnswersRestController {
     }
 
     /**
-     * Delete cloud sandbox reference with all answers.
+     * Delete cloud sandbox reference with all answers by sandbox reference.
      */
     @ApiOperation(httpMethod = "DELETE",
-            value = "Delete cloud sandbox reference with all answers.",
+            value = "Delete cloud sandbox reference with all answers by sandbox reference.",
             nickname = "deleteCloudSandboxReferenceWithAnswers",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -190,6 +190,26 @@ public class SandboxAnswersRestController {
     public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
             @ApiParam(value = "ID of the user whose cloud sandbox to delete.", required = true) @PathVariable("sandboxRefId") String sandboxRefId) {
         sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(sandboxRefId);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Delete cloud sandbox references with all answers by allocation ID.
+     */
+    @ApiOperation(httpMethod = "DELETE",
+            value = "Delete cloud sandbox references with all answers by allocation ID.",
+            nickname = "deleteCloudSandboxReferenceWithAnswersByAllocId",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "The cloud sandbox reference with answers was successfully deleted."),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/{allocationId}")
+    public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
+            @ApiParam(value = "allocationID of the cloud sandboxes to delete.", required = true) @PathVariable("sandboxRefId") Long allocationId) {
+        sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(allocationId);
         return ResponseEntity.noContent().build();
     }
 
