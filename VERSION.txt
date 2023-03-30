@@ -1,3 +1,4 @@
+2.0.4 Add an endpoint to delete sandbox references and answers by allocation ID.
 22.12-rc.1 Changed sandboxId type to string.
 2.0.3 Removed stacktrace from errors.
 2.0.2 Modify URL of method to obtain answers for local sandbox.
