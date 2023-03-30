@@ -13,9 +13,11 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SandboxInfoDto {
 
-    @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "12")
+    @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "string")
     private String sandboxRefId;
-    @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "12")
+    @ApiModelProperty(value = "The identifier of a sandbox allocation", example = "12")
+    private Long allocationId;
+    @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "abc-123")
     private String accessToken;
     @ApiModelProperty(value = "The identifier of the user who possess the local sandbox.", example = "12")
     private Long userId;
@@ -42,6 +44,14 @@ public class SandboxInfoDto {
 
     public void setSandboxRefId(String sandboxRefId) {
         this.sandboxRefId = sandboxRefId;
+    }
+
+    public Long getAllocationId() {
+        return allocationId;
+    }
+
+    public void setAllocationId(Long allocationId) {
+        this.allocationId = allocationId;
     }
 
     public String getAccessToken() {
@@ -72,6 +82,7 @@ public class SandboxInfoDto {
     public String toString() {
         return "SandboxInfoDto{" +
                 "sandboxRefId=" + sandboxRefId +
+                ", allocationId" + allocationId +
                 ", accessToken='" + accessToken + '\'' +
                 ", userId=" + userId +
                 '}';
