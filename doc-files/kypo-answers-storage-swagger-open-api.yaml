@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.4"
+  version: "Version: 2.0.5"
   title: "KYPO Answers Storage - API Reference"
 host: "localhost:8087"
 basePath: "/kypo-rest-answers-storage/api/v1"
