@@ -1,3 +1,4 @@
+2.0.6 Increase maximum header size limit.
 2.0.5 Add sandbox allocation id to migration db.
 2.0.4 Add an endpoint to delete sandbox references and answers by allocation ID.
 22.12-rc.1 Changed sandboxId type to string.
