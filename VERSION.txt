@@ -1,3 +1,4 @@
+2.0.7 Rename allocationId to allocationUnitId in SandboxInfoCreateDto.
 2.0.6 Increase maximum header size limit.
 2.0.5 Add sandbox allocation id to migration db.
 2.0.4 Add an endpoint to delete sandbox references and answers by allocation ID.
