@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.6"
+  version: "Version: 2.0.7"
   title: "KYPO Answers Storage - API Reference"
 host: "localhost:8087"
 basePath: "/kypo-rest-answers-storage/api/v1"
@@ -403,7 +403,7 @@ definitions:
         type: "string"
         example: "string"
         description: "The identifier of a sandbox for that we store the answers"
-      allocation_id:
+      allocation_unit_id:
         type: "integer"
         format: "int64"
         example: 12
