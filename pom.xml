@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cz.muni.ics.kypo</groupId>
-    <artifactId>kypo-answers-storage</artifactId>
-    <version>2.0.7</version>
-    <name>kypo-answers-storage</name>
-    <description>Project for answers from sandboxes</description>
+    <groupId>cz.cyberrange.platform</groupId>
+    <artifactId>answers-storage</artifactId>
+    <name>CyberRangeCZ Platform Answers Storage</name>
+    <description>Backend handling variant sandbox answers</description>
+    <version>2.0.3</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -153,19 +153,19 @@
                         <apiSource>
                             <springmvc>true</springmvc>
                             <locations>
-                                <location>cz.muni.ics.kypo.answers.storage</location>
+                                <location>cz.cyberrange.platform.answers.storage</location>
                             </locations>
                             <schemes>http,https</schemes>
                             <host>${swagger.host}</host>
-                            <basePath>/kypo-rest-answers-storage/api/v1</basePath>
+                            <basePath>/answers-storage/api/v1</basePath>
                             <info>
-                                <title>KYPO Answers Storage - API Reference</title>
+                                <title>CyberRangeCZ Platform Answers Storage - API Reference</title>
                                 <version>Version: ${project.version}</version>
                             </info>
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
-                            <swaggerFileName>kypo-answers-storage-swagger-open-api</swaggerFileName>
+                            <swaggerFileName>swagger-docs</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
-                            <swaggerApiReader>cz.muni.ics.kypo.answers.storage.utils.SnakeCaseSwaggerReader</swaggerApiReader>
+                            <swaggerApiReader>cz.cyberrange.platform.answers.storage.utils.SnakeCaseSwaggerReader</swaggerApiReader>
                         </apiSource>
                     </apiSources>
                 </configuration>
