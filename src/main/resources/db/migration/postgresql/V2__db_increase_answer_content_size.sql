@@ -1,1 +1,0 @@
-ALTER TABLE sandbox_answer ALTER COLUMN answer_content TYPE varchar(2048);
