@@ -13,8 +13,8 @@ COPY src /app/src
 COPY etc/ci_settings.xml /app/etc/ci_settings.xml
 
 # Build JAR file
-RUN mvn clean install -DskipTests -Dproprietary-repo-url=$PROPRIETARY_REPO_URL && \
-    cp /app/target/$PROJECT_ARTIFACT_ID-*.jar /app/kypo-answers-storage.jar
+RUN mvn clean install -DskipTests $MAVEN_CLI_OPTS -Dproprietary-repo-url=$PROPRIETARY_REPO_URL && \
+    cp /app/target/$PROJECT_ARTIFACT_ID-*.jar /app/$PROJECT_ARTIFACT_ID.jar
 
 ############ RUNNABLE STAGE ############
 FROM eclipse-temurin:17-jre-focal AS runnable
