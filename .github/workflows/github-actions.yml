@@ -1,4 +1,4 @@
-name: Adaptive training CI
+name: Answers storage CI
 
 on:
   push:
