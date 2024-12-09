@@ -157,13 +157,13 @@
                             </locations>
                             <schemes>http,https</schemes>
                             <host>${swagger.host}</host>
-                            <basePath>/kypo-rest-answers-storage/api/v1</basePath>
+                            <basePath>/rest-answers-storage/api/v1</basePath>
                             <info>
-                                <title>KYPO Answers Storage - API Reference</title>
+                                <title>Answers Storage - API Reference</title>
                                 <version>Version: ${project.version}</version>
                             </info>
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
-                            <swaggerFileName>kypo-answers-storage-swagger-open-api</swaggerFileName>
+                            <swaggerFileName>answers-storage-swagger-open-api</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
                             <swaggerApiReader>cz.muni.ics.kypo.answers.storage.utils.SnakeCaseSwaggerReader</swaggerApiReader>
                         </apiSource>
