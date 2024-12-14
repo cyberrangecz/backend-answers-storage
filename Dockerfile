@@ -1,3 +1,5 @@
+ARG PROJECT_ARTIFACT_ID=answers-storage
+
 ############ BUILD STAGE ############
 FROM maven:3.8.4-openjdk-17-slim AS build
 WORKDIR /app
@@ -21,7 +23,7 @@ FROM eclipse-temurin:17-jre-focal AS runnable
 
 WORKDIR /app
 
-ARG PROJECT_ARTIFACT_ID=PROJECT-NAME
+ARG PROJECT_ARTIFACT_ID
 
 ENV PROJECT_ARTIFACT_ID=${PROJECT_ARTIFACT_ID}
 
