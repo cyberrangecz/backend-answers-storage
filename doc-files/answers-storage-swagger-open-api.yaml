@@ -1,10 +1,10 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.3"
-  title: "KYPO Answers Storage - API Reference"
+  version: "Version: 2.0.7"
+  title: "Answers Storage - API Reference"
 host: "localhost:8087"
-basePath: "/kypo-rest-answers-storage/api/v1"
+basePath: "/rest-answers-storage/api/v1"
 tags:
 - name: "sandboxes"
 schemes:
@@ -146,11 +146,33 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+  /sandboxes/{allocationId}:
+    delete:
+      tags:
+      - "sandboxes"
+      summary: "Delete cloud sandbox references with all answers by allocation ID."
+      description: ""
+      operationId: "deleteCloudSandboxReferenceWithAnswersByAllocId"
+      parameters:
+      - name: "sandboxRefId"
+        in: "path"
+        description: "allocationID of the cloud sandboxes to delete."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "The cloud sandbox reference with answers was successfully\
+            \ deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
   /sandboxes/{sandboxRefId}:
     delete:
       tags:
       - "sandboxes"
-      summary: "Delete cloud sandbox reference with all answers."
+      summary: "Delete cloud sandbox reference with all answers by sandbox reference."
       description: ""
       operationId: "deleteCloudSandboxReferenceWithAnswers"
       parameters:
@@ -158,8 +180,7 @@ paths:
         in: "path"
         description: "ID of the user whose cloud sandbox to delete."
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
         204:
           description: "The cloud sandbox reference with answers was successfully\
@@ -182,8 +203,7 @@ paths:
         in: "path"
         description: "ID sandbox for that we store answers."
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
         200:
           description: "The answers for particular cloud sandbox were found."
@@ -207,8 +227,7 @@ paths:
         in: "path"
         description: "ID of sandbox for that we store answers."
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       - name: "answerVariableName"
         in: "path"
         description: "Variable name of the answer."
@@ -381,13 +400,17 @@ definitions:
     type: "object"
     properties:
       sandbox_ref_id:
+        type: "string"
+        example: "string"
+        description: "The identifier of a sandbox for that we store the answers"
+      allocation_unit_id:
         type: "integer"
         format: "int64"
         example: 12
-        description: "The identifier of a sandbox for that we store the answers"
+        description: "The identifier of a sandbox allocation"
       access_token:
         type: "string"
-        example: "12"
+        example: "abc-123"
         description: "The identifier of the training instance in which the local sandbox\
           \ is/has been used."
       user_id:
@@ -404,13 +427,17 @@ definitions:
     type: "object"
     properties:
       sandbox_ref_id:
+        type: "string"
+        example: "string"
+        description: "The identifier of a sandbox for that we store the answers"
+      allocation_id:
         type: "integer"
         format: "int64"
         example: 12
-        description: "The identifier of a sandbox for that we store the answers"
+        description: "The identifier of a sandbox allocation"
       access_token:
         type: "string"
-        example: "12"
+        example: "abc-123"
         description: "The identifier of the training instance in which the local sandbox\
           \ is/has been used."
       user_id:

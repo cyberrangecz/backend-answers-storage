@@ -17,7 +17,7 @@ public class SandboxInfoCreateDto {
     @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "string")
     private String sandboxRefId;
     @ApiModelProperty(value = "The identifier of a sandbox allocation", example = "12")
-    private Long allocationId;
+    private Long allocationUnitId;
     @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "abc-123")
     private String accessToken;
     @ApiModelProperty(value = "The identifier of the user who possess the local sandbox.", example = "12")
@@ -34,12 +34,12 @@ public class SandboxInfoCreateDto {
         this.sandboxRefId = sandboxRefId;
     }
 
-    public Long getAllocationId() {
-        return allocationId;
+    public Long getAllocationUnitId() {
+        return allocationUnitId;
     }
 
-    public void setAllocationId(Long allocationId) {
-        this.allocationId = allocationId;
+    public void setAllocationUnitId(Long allocationUnitId) {
+        this.allocationUnitId = allocationUnitId;
     }
 
     public String getAccessToken() {
@@ -70,7 +70,7 @@ public class SandboxInfoCreateDto {
     public String toString() {
         return "CloudSandboxInfoCreateDto{" +
                 "sandboxRefId=" + sandboxRefId +
-                ", allocationId=" + allocationId +
+                ", allocationUnitId=" + allocationUnitId +
                 ", accessToken='" + accessToken + '\'' +
                 ", userId=" + userId +
                 '}';
