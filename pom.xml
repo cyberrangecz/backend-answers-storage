@@ -7,7 +7,7 @@
     <artifactId>answers-storage</artifactId>
     <name>CyberRangeCZ Platform Answers Storage</name>
     <description>Backend handling variant sandbox answers</description>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
