@@ -6,9 +6,6 @@ CREATE TABLE sandbox_info (
     allocation_id   int8        DEFAULT NULL
 );
 
-ALTER SEQUENCE sandbox_info_sandbox_info_id_seq RENAME TO sandbox_info_id_seq;
-ALTER SEQUENCE sandbox_info_id_seq INCREMENT 50;
-
 CREATE UNIQUE INDEX sandbox_ref_id_index
     ON sandbox_info (sandbox_ref_id)
     WHERE sandbox_info.access_token IS NULL AND sandbox_info.user_id IS NULL;
@@ -26,7 +23,7 @@ CREATE TABLE sandbox_answer (
     FOREIGN KEY (sandbox_info_id) REFERENCES sandbox_info
 );
 
-ALTER SEQUENCE sandbox_answer_sandbox_answer_id_seq RENAME TO sandbox_answer_id_seq;
-ALTER SEQUENCE sandbox_answer_id_seq INCREMENT 50;
+CREATE SEQUENCE sandbox_answer_id_seq AS bigint INCREMENT 50 MINVALUE 1;
+CREATE SEQUENCE sandbox_info_id_seq AS bigint INCREMENT 50 MINVALUE 1;
 
 CREATE INDEX sandbox_answer_answer_variable_name_index ON sandbox_answer (answer_variable_name);
