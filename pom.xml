@@ -7,8 +7,15 @@
     <artifactId>answers-storage</artifactId>
     <name>CyberRangeCZ Platform Answers Storage</name>
     <description>Backend handling variant sandbox answers</description>
-    <version>0.0.2</version>
+    <version>1.0.0</version>
 
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/cyberrangecz/backend-answers-storage/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
