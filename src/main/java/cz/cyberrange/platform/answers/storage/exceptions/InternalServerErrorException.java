@@ -3,6 +3,10 @@ package cz.cyberrange.platform.answers.storage.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Signals an unexpected server-side condition with no more specific exception to describe it.
+ * The request is answered with HTTP 500 and an ApiError body.
+ */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
         reason = "A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.")
 public class InternalServerErrorException extends RuntimeException {

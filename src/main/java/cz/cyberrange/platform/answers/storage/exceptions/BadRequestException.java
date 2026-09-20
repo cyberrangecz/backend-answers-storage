@@ -3,6 +3,10 @@ package cz.cyberrange.platform.answers.storage.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Signals that an incoming request cannot be processed because of a client-side error.
+ * The request is answered with HTTP 400 and an ApiError body.
+ */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST,
         reason = "The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).")
 public class BadRequestException extends RuntimeException {

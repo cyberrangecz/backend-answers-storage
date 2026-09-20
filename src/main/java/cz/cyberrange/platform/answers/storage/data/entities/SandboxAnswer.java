@@ -12,6 +12,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
 
+/**
+ * One stored answer value for a variable of a sandbox. An answer is deleted along with the
+ * sandbox it belongs to.
+ */
 @Entity
 @Table(name = "sandbox_answer")
 public class SandboxAnswer implements Serializable {

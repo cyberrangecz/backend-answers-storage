@@ -1,29 +1,30 @@
 package cz.cyberrange.platform.answers.storage.api;
 
 import cz.cyberrange.platform.answers.storage.validation.ValidSandboxIdentifier;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiModel(
-        value = "SandboxInfoCreateDto"
-)
+/**
+ * Sandbox and answer creation input submitted by the caller. It must carry either sandboxRefId
+ * alone, or accessToken together with userId. The allocation unit id is not stored with the
+ * sandbox.
+ */
+@Schema(name = "SandboxInfoCreateDto", description = "A sandbox and the answers to store for it.")
 @ValidSandboxIdentifier
 public class SandboxInfoCreateDto {
 
-    @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "string")
+    @Schema(description = "Identifies a cloud sandbox; leave it out when sending accessToken and userId.", format = "uuid", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
     private String sandboxRefId;
-    @ApiModelProperty(value = "The identifier of a sandbox allocation", example = "12")
+    @Schema(description = "Not kept with the stored sandbox.", example = "12")
     private Long allocationUnitId;
-    @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "abc-123")
+    @Schema(description = "Identifies a local sandbox together with userId; leave it out when sending sandboxRefId.", example = "abc-123")
     private String accessToken;
-    @ApiModelProperty(value = "The identifier of the user who possess the local sandbox.", example = "12")
+    @Schema(description = "Identifies a local sandbox together with accessToken; leave it out when sending sandboxRefId.", example = "12")
     private Long userId;
     @Valid
-    @ApiModelProperty(value = "The answers for given sandbox")
     private List<SandboxAnswersCreateDto> sandboxAnswers = new ArrayList<>();
 
     public String getSandboxRefId() {

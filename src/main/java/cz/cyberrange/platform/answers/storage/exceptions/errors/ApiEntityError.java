@@ -1,16 +1,22 @@
 package cz.cyberrange.platform.answers.storage.exceptions.errors;
 
 import cz.cyberrange.platform.answers.storage.exceptions.EntityErrorDetail;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Objects;
 
-@ApiModel(value = "ApiEntityError", description = "A detailed error information related to the entity.", parent = ApiError.class)
+/**
+ * Body returned when a REST request fails on a particular entity, adding the entity detail to
+ * the fields of a plain error body.
+ */
+@Schema(name = "ApiEntityError", description = "Body returned when a request fails on a particular entity.")
 public class ApiEntityError extends ApiError {
-    @ApiModelProperty(value = "Detail of the entity which is related to the error.")
+    /**
+     * Which entity the request failed on and why; null when the failure names no entity.
+     */
+    @Schema(description = "Which entity the request failed on, and why.")
     private EntityErrorDetail entityErrorDetail;
 
     private ApiEntityError() {
@@ -26,22 +32,63 @@ public class ApiEntityError extends ApiError {
         this.setEntityErrorDetail(entityErrorDetail);
     }
 
+    /**
+     * Creates an entity error body timestamped with the current time. The reason carried by the
+     * entity detail is reported as the message, falling back to the given message.
+     *
+     * @param httpStatus the status to report
+     * @param message the message to fall back on
+     * @param errors the contributing errors
+     * @param path the request path to report
+     * @param entityErrorDetail the entity detail to report, may be null
+     * @return the error body
+     */
     public static ApiEntityError of(HttpStatus httpStatus, String message, List<String> errors, String path, EntityErrorDetail entityErrorDetail) {
         ApiEntityError apiEntityError = new ApiEntityError(httpStatus, message, path, entityErrorDetail);
         apiEntityError.setErrors(errors);
         return apiEntityError;
     }
 
+    /**
+     * Creates an entity error body with a single contributing error, timestamped with the current
+     * time. The reason carried by the entity detail is reported as the message, falling back to
+     * the given message.
+     *
+     * @param httpStatus the status to report
+     * @param message the message to fall back on
+     * @param error the single contributing error
+     * @param path the request path to report
+     * @param entityErrorDetail the entity detail to report, may be null
+     * @return the error body
+     */
     public static ApiEntityError of(HttpStatus httpStatus, String message, String error, String path, EntityErrorDetail entityErrorDetail) {
         ApiEntityError apiEntityError = new ApiEntityError(httpStatus, message, path, entityErrorDetail);
         apiEntityError.setError(error);
         return apiEntityError;
     }
 
+    /**
+     * Creates an entity error body with an empty path.
+     *
+     * @param httpStatus the status to report
+     * @param message the message to fall back on
+     * @param errors the contributing errors
+     * @param entityErrorDetail the entity detail to report, may be null
+     * @return the error body
+     */
     public static ApiEntityError of(HttpStatus httpStatus, String message, List<String> errors, EntityErrorDetail entityErrorDetail) {
         return ApiEntityError.of(httpStatus, message, errors, "", entityErrorDetail);
     }
 
+    /**
+     * Creates an entity error body with an empty path and a single contributing error.
+     *
+     * @param httpStatus the status to report
+     * @param message the message to fall back on
+     * @param error the single contributing error
+     * @param entityErrorDetail the entity detail to report, may be null
+     * @return the error body
+     */
     public static ApiEntityError of(HttpStatus httpStatus, String message, String error, EntityErrorDetail entityErrorDetail) {
         return ApiEntityError.of(httpStatus, message, error, "", entityErrorDetail);
     }
@@ -66,20 +113,10 @@ public class ApiEntityError extends ApiError {
     }
 
 
-    /**
-     * Gets entity error detail.
-     *
-     * @return the entity error detail
-     */
     public EntityErrorDetail getEntityErrorDetail() {
         return entityErrorDetail;
     }
 
-    /**
-     * Sets entity error detail.
-     *
-     * @param entityErrorDetail the entity error detail
-     */
     public void setEntityErrorDetail(EntityErrorDetail entityErrorDetail) {
         this.entityErrorDetail = entityErrorDetail;
     }

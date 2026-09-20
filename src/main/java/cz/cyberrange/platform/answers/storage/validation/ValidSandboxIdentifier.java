@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
- * The annotated element must be class with a fields sandboxRefId, accessToken and userId.
- * Either sandboxRefId must be defined or access token along with userId.
+ * Accepts a class carrying sandboxRefId, accessToken and userId only when it sets sandboxRefId
+ * alone, or accessToken together with userId.
  */
 @Target({TYPE})
 @Retention(RUNTIME)

@@ -1,21 +1,27 @@
 package cz.cyberrange.platform.answers.storage.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+/**
+ * Which entity a request failed on, which identifier singles it out, and why it failed.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EntityErrorDetail {
-    @ApiModelProperty(value = "Class of the entity.", example = "IDMGroup")
+    @Schema(description = "Name of the entity type the request failed on.", example = "SandboxInfo")
     private String entity;
-    @ApiModelProperty(value = "Identifier of the entity.", example = "id")
+    @Schema(description = "Name of the field that singles that entity out.", example = "id")
     private String identifier;
-    @ApiModelProperty(value = "Value of the identifier.", example = "1")
+    @Schema(description = "Value of that field.", example = "1")
     private Object identifierValue;
-    @ApiModelProperty(value = "Detailed message of the exception", example = "Group with same name already exists.")
+    /**
+     * Why the request failed; null until supplied, whether at construction or afterwards.
+     */
+    @Schema(example = "Answers for the cloud sandbox (sandboxRefId: 3fa85f64-5717-4562-b3fc-2c963f66afa6) have been already created.")
     private String reason;
 
     public EntityErrorDetail() {
@@ -31,6 +37,9 @@ public class EntityErrorDetail {
         this.entity = entityClass.getSimpleName();
     }
 
+    /**
+     * @throws ClassCastException when identifierValue is not an instance of identifierClass
+     */
     public EntityErrorDetail(@NotNull Class<?> entityClass,
                              @NotBlank String identifier,
                              @NotNull Class<?> identifierClass,
@@ -41,6 +50,11 @@ public class EntityErrorDetail {
         this.identifierValue = identifierClass.cast(identifierValue);
     }
 
+    /**
+     * Creates a detail with no reason.
+     *
+     * @throws ClassCastException when identifierValue is not an instance of identifierClass
+     */
     public EntityErrorDetail(@NotNull Class<?> entityClass,
                              @NotBlank String identifier,
                              @NotNull Class<?> identifierClass,

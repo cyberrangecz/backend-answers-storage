@@ -1,16 +1,16 @@
 package cz.cyberrange.platform.answers.storage.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@ApiModel(
-        value = "SandboxAnswersDto"
-)
+/**
+ * API representation of one stored answer value, returned to the caller.
+ */
+@Schema(name = "SandboxAnswersDto", description = "One answer stored for a sandbox.")
 public class SandboxAnswersDto {
 
-    @ApiModelProperty(value = "The content of the variant answer in particular (phase/level)", example = "nmap 192.168.0.1")
+    @Schema(example = "nmap 192.168.0.1")
     private String answerContent;
-    @ApiModelProperty(value = "The variable name of the variant answer", example = "sandbox-1-2-answer")
+    @Schema(description = "Key this answer is read back by.", example = "sandbox-1-2-answer")
     private String answerVariableName;
 
     public String getAnswerContent() {

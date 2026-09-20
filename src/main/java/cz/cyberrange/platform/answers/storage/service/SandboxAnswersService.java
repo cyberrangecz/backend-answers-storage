@@ -20,6 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
+/**
+ * Business logic for storing, deleting and querying sandboxes and their stored answers,
+ * addressed either by sandbox reference id, by allocation id, or by access token and user id.
+ */
 @Service
 @Transactional
 public class SandboxAnswersService {
@@ -37,6 +41,14 @@ public class SandboxAnswersService {
         this.sandboxInfoMapper = sandboxInfoMapper;
     }
 
+    /**
+     * Returns the answers stored for the given cloud sandbox. The result carries only the
+     * reference id and the answers; the other identifiers stay unset.
+     *
+     * @param sandboxRefId reference id of the sandbox
+     * @return the sandbox reference id with its answers
+     * @throws EntityNotFoundException when no sandbox has that reference id
+     */
     @Transactional(readOnly = true)
     public SandboxInfoDto getSandboxAnswers(String sandboxRefId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findBySandboxRefId(sandboxRefId)
@@ -45,6 +57,16 @@ public class SandboxAnswersService {
         return new SandboxInfoDto(sandboxRefId, sandboxInfoMapper.mapToAnswers(sandboxAnswerDtoSet));
     }
 
+    /**
+     * Returns the answers stored for the local sandbox with the given access token and user id.
+     * The result carries only the access token, the user id and the answers; the reference id
+     * and allocation id stay unset.
+     *
+     * @param accessToken access token of the sandbox
+     * @param userId id of the user owning the sandbox
+     * @return the access token and user id with the sandbox's answers
+     * @throws EntityNotFoundException when no sandbox matches both values
+     */
     @Transactional(readOnly = true)
     public SandboxInfoDto getSandboxAnswers(String accessToken, Long userId) {
         SandboxInfo sandboxInfo = sandboxInfoRepository.findByAccessTokenAndUserIdId(accessToken, userId)
@@ -53,6 +75,14 @@ public class SandboxAnswersService {
         return new SandboxInfoDto(accessToken, userId, sandboxInfoMapper.mapToAnswers(sandboxAnswerDtoSet));
     }
 
+    /**
+     * Returns the content of one answer of the cloud sandbox with the given reference id.
+     *
+     * @param sandboxRefId reference id of the sandbox
+     * @param answerVariableName variable name of the answer
+     * @return the stored answer content
+     * @throws EntityNotFoundException when that sandbox has no answer for that variable name
+     */
     @Transactional(readOnly = true)
     public String getAnswerBySandboxAndVariableName(String sandboxRefId, String answerVariableName) {
         return sandboxAnswerRepository.findAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName)
@@ -60,6 +90,16 @@ public class SandboxAnswersService {
                 .getAnswerContent();
     }
 
+    /**
+     * Returns the content of one answer of the local sandbox with the given access token and
+     * user id.
+     *
+     * @param accessToken access token of the sandbox
+     * @param userId id of the user owning the sandbox
+     * @param answerVariableName variable name of the answer
+     * @return the stored answer content
+     * @throws EntityNotFoundException when that sandbox has no answer for that variable name
+     */
     @Transactional(readOnly = true)
     public String getAnswerBySandboxAndVariableName(String accessToken, Long userId, String answerVariableName) {
         return sandboxAnswerRepository.findAnswerBySandboxAndVariableName(accessToken, userId, answerVariableName)
@@ -67,25 +107,59 @@ public class SandboxAnswersService {
                 .getAnswerContent();
     }
 
+    /**
+     * Returns one page of sandboxes with their answers, keeping only those satisfying the given
+     * filter. The page is empty when nothing matches.
+     *
+     * @param predicate condition sandboxes must satisfy
+     * @param pageable page and sort to apply
+     * @return the matching page of sandboxes with a pagination summary
+     */
     @Transactional(readOnly = true)
     public PageResultResource<SandboxInfoDto> getAllSandboxesAnswers(Predicate predicate, Pageable pageable) {
         Page<SandboxInfo> sandboxInfo = sandboxInfoRepository.findAll(predicate, pageable);
         return sandboxInfoMapper.mapToPageResultResource(sandboxInfo);
     }
 
+    /**
+     * Deletes the cloud sandbox with the given reference id together with its answers. Succeeds
+     * even when no sandbox has that reference id.
+     *
+     * @param sandboxRefId reference id of the sandbox to delete
+     */
     public void deleteCloudSandboxReferenceWithAnswers(String sandboxRefId) {
         sandboxInfoRepository.deleteBySandboxRefId(sandboxRefId);
     }
 
+    /**
+     * Deletes every cloud sandbox with the given allocation id together with their answers.
+     * Succeeds even when none matches.
+     *
+     * @param allocationId allocation id of the sandboxes to delete
+     */
     public void deleteCloudSandboxReferenceWithAnswers(Long allocationId) {
         sandboxInfoRepository.deleteByAllocationId(allocationId);
     }
 
 
+    /**
+     * Deletes the local sandbox with the given access token and user id together with its
+     * answers. Succeeds even when no sandbox matches both values.
+     *
+     * @param accessToken access token of the sandbox to delete
+     * @param userId id of the user owning the sandbox to delete
+     */
     public void deleteLocalSandboxReferenceWithAnswers(String accessToken, Long userId) {
         sandboxInfoRepository.deleteByAccessTokenAndUserId(accessToken, userId);
     }
 
+    /**
+     * Stores a new sandbox together with its answers. The allocation unit id given in the input
+     * is not stored.
+     *
+     * @param sandboxInfoCreateDto the sandbox and answers to store
+     * @throws EntityConflictException when answers for that sandbox are already stored
+     */
     public void storeAllAnswersForSandbox(SandboxInfoCreateDto sandboxInfoCreateDto) {
         checkExistenceOfSandboxInfo(sandboxInfoCreateDto);
         SandboxInfo sandboxInfo = sandboxInfoMapper.mapCreateDtoToEntity(sandboxInfoCreateDto);
@@ -93,6 +167,13 @@ public class SandboxAnswersService {
         sandboxInfoRepository.save(sandboxInfo);
     }
 
+    /**
+     * Rejects the given input when a sandbox is already stored under its identifiers, matched by
+     * reference id when one is given and by user id with access token otherwise.
+     *
+     * @param sandboxInfo the input to check
+     * @throws EntityConflictException when such a sandbox already exists
+     */
     private void checkExistenceOfSandboxInfo(SandboxInfoCreateDto sandboxInfo) {
         if (sandboxInfo.getSandboxRefId() != null && sandboxInfoRepository.existsBySandboxRefId(sandboxInfo.getSandboxRefId())) {
             throw new EntityConflictException(new EntityErrorDetail(SandboxInfo.class,

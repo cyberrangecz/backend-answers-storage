@@ -40,7 +40,8 @@ import java.io.StringWriter;
 import java.util.List;
 
 /**
- * The type Custom rest exception handler training.
+ * Turns framework and application exceptions into REST error responses. Each handler answers with
+ * an ApiError or ApiEntityError body carrying the status, message and path of the failure.
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -49,6 +50,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     private static final UrlPathHelper URL_PATH_HELPER = new UrlPathHelper();
     private static final Logger LOG = LoggerFactory.getLogger(CustomRestExceptionHandler.class);
 
+    /**
+     * Handles a TypeMismatchException with HTTP 400. The reported path is the context path rather
+     * than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(final TypeMismatchException ex, final HttpHeaders headers, final HttpStatus status,
                                                         final WebRequest request) {
@@ -60,6 +71,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles a MissingServletRequestPartException with HTTP 400. The reported path is the
+     * context path rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestPart(final MissingServletRequestPartException ex, final HttpHeaders headers,
                                                                      final HttpStatus status, final WebRequest request) {
@@ -71,6 +92,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles a MissingServletRequestParameterException with HTTP 400. The reported path is the
+     * context path rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(final MissingServletRequestParameterException ex, final HttpHeaders headers,
                                                                           final HttpStatus status, final WebRequest request) {
@@ -82,6 +113,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles a NoHandlerFoundException with HTTP 404. The reported path is the context path
+     * rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(final NoHandlerFoundException ex, final HttpHeaders headers, final HttpStatus status,
                                                                    final WebRequest request) {
@@ -93,6 +134,17 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles an HttpRequestMethodNotSupportedException with HTTP 404. The rejected method and
+     * the supported ones are reported as the contributing error, and the reported path is the
+     * context path rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(final HttpRequestMethodNotSupportedException ex, final HttpHeaders headers,
                                                                          final HttpStatus status, final WebRequest request) {
@@ -109,6 +161,17 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles an HttpMediaTypeNotSupportedException with HTTP 415. The rejected content type and
+     * the supported media types are reported as the contributing error, and the reported path is
+     * the context path rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(final HttpMediaTypeNotSupportedException ex, final HttpHeaders headers,
                                                                      final HttpStatus status, final WebRequest request) {
@@ -125,6 +188,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles a MethodArgumentNotValidException with HTTP 400. The message lists the failed
+     * validations, and the reported path is the context path rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex, final HttpHeaders headers,
                                                                   final HttpStatus status, final WebRequest request) {
@@ -141,6 +214,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles an HttpMessageNotReadableException with HTTP 400. The reported path is the context
+     * path rather than the request URI.
+     *
+     * @param ex the exception being handled
+     * @param headers unused
+     * @param status unused
+     * @param request the current request
+     * @return the error response
+     */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex, final HttpHeaders headers,
                                                                   final HttpStatus status, final WebRequest request) {
@@ -156,11 +239,11 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     // Handling of own exceptions
 
     /**
-     * Handle constraint violation response entity.
+     * Handles a ConstraintViolationException with HTTP 400.
      *
-     * @param ex  the ex
-     * @param req the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param req the current request
+     * @return the error response
      */
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(final ConstraintViolationException ex,
@@ -174,12 +257,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle bad request exception response entity.
+     * Handles a BadRequestException with HTTP 400.
      *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
      */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Object> handleBadRequestException(final BadRequestException ex, final WebRequest request, HttpServletRequest req) {
@@ -192,12 +275,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle internal server error exception response entity.
+     * Handles an InternalServerErrorException with HTTP 500.
      *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
      */
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<Object> handleInternalServerErrorException(final InternalServerErrorException ex, final WebRequest request, HttpServletRequest req) {
@@ -210,12 +293,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle entity not found exception response entity.
+     * Handles an EntityNotFoundException with HTTP 404 and an ApiEntityError body.
      *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
      */
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<Object> handleEntityNotFoundException(final EntityNotFoundException ex, final WebRequest request, HttpServletRequest req) {
@@ -228,6 +311,14 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Handles an EntityConflictException with HTTP 409 and an ApiEntityError body.
+     *
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
+     */
     @ExceptionHandler({EntityConflictException.class})
     public ResponseEntity<Object> handleEntityConflictException(final EntityConflictException ex, final WebRequest request, HttpServletRequest req) {
         final ApiEntityError apiError = ApiEntityError.of(
@@ -240,14 +331,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle illegal argument exception response entity.
+     * Handles an IllegalArgumentException with HTTP 406.
      *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
      */
-// thrown from SERVICE layer (nullpointers, illegal argument etc.)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(final IllegalArgumentException ex, final WebRequest request, HttpServletRequest req) {
         final ApiError apiError = ApiError.of(
@@ -259,12 +349,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle null pointer exception response entity.
+     * Handles a NullPointerException with HTTP 400.
      *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
      */
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointerException(final NullPointerException ex, final WebRequest request, HttpServletRequest req) {
@@ -277,12 +367,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handle all response entity.
+     * Handles any exception no more specific handler covers, with HTTP 500.
      *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
+     * @param ex the exception being handled
+     * @param request unused
+     * @param req the current request
+     * @return the error response
      */
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request, HttpServletRequest req) {
@@ -294,6 +384,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    /**
+     * Returns the deepest cause of the given exception, or the exception itself when it has none.
+     *
+     * @param exception the exception to walk
+     * @return the deepest cause
+     */
     private Exception getInitialException(Exception exception) {
         while (exception.getCause() != null) {
             exception = (Exception) exception.getCause();
@@ -314,6 +410,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return "It was not possible to get the stack trace for that exception.";
     }
 
+    /**
+     * Logs the exception's stack trace at error level and returns its message.
+     *
+     * @param exception the exception to log
+     * @return the exception's message, or a failure notice when the stack trace could not be
+     * written
+     */
     private String getErrorMessage(Exception exception) {
         try (StringWriter sw = new StringWriter();
              PrintWriter pw = new PrintWriter(sw)) {
