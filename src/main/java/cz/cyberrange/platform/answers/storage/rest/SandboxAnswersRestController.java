@@ -3,7 +3,7 @@ package cz.cyberrange.platform.answers.storage.rest;
 import com.querydsl.core.types.Predicate;
 import cz.cyberrange.platform.answers.storage.api.SandboxInfoCreateDto;
 import cz.cyberrange.platform.answers.storage.api.SandboxInfoDto;
-import cz.cyberrange.platform.answers.storage.api.reponses.PageResultResource;
+import cz.cyberrange.platform.answers.storage.api.responses.PageResultResource;
 import cz.cyberrange.platform.answers.storage.data.entities.SandboxInfo;
 import cz.cyberrange.platform.answers.storage.exceptions.errors.ApiError;
 import cz.cyberrange.platform.answers.storage.service.SandboxAnswersService;
@@ -110,10 +110,10 @@ public class SandboxAnswersRestController {
             operationId = "findAnswerByCloudSandboxAndVariableName",
             summary = "Get one answer of a cloud sandbox")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "The stored answer content.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "200", description = "The stored answer content.", content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "404", description = "No answer matches the sandbox and variable name.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class)))
     })
-    @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> findAnswerByCloudSandboxAndVariableName(
             @Parameter(schema = @Schema(format = "uuid")) @PathVariable(value = "sandboxRefId") String sandboxRefId,
             @PathVariable(value = "answerVariableName") String answerVariableName) {
@@ -134,11 +134,11 @@ public class SandboxAnswersRestController {
             summary = "Get one answer of a local sandbox",
             description = "A local sandbox is addressed by access token together with user id.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "The stored answer content.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "200", description = "The stored answer content.", content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "404", description = "No answer matches the sandbox and variable name.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class))),
             @ApiResponse(responseCode = "400", description = "The user id is not a valid number.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
-    @GetMapping(path = "/access-tokens/{accessToken}/users/{userId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/access-tokens/{accessToken}/users/{userId}/answers/{answerVariableName}", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> findAnswerByLocalSandboxAndVariableName(
             @PathVariable("accessToken") String accessToken,
             @PathVariable("userId") Long userId,

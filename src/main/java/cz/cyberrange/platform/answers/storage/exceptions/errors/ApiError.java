@@ -1,7 +1,6 @@
 package cz.cyberrange.platform.answers.storage.exceptions.errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 
@@ -14,8 +13,6 @@ import java.util.Objects;
  * the request path, and when the failure happened.
  */
 @Schema(name = "ApiError", description = "Body returned when a request fails.")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = ApiEntityError.class, name = "ApiEntityError")})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiError {
 

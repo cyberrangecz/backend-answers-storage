@@ -397,19 +397,6 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return exception;
     }
 
-    private String getFullStackTrace(Exception exception) {
-        try (StringWriter sw = new StringWriter();
-             PrintWriter pw = new PrintWriter(sw)) {
-            exception.printStackTrace(pw);
-            String fullStackTrace = sw.toString();
-            LOG.error(fullStackTrace);
-            return fullStackTrace;
-        } catch (IOException e) {
-            LOG.error("It was not possible to get the stack trace for that exception: ", e);
-        }
-        return "It was not possible to get the stack trace for that exception.";
-    }
-
     /**
      * Logs the exception's stack trace at error level and returns its message.
      *

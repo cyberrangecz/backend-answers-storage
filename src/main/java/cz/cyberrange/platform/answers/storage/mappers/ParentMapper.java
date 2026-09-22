@@ -1,6 +1,6 @@
 package cz.cyberrange.platform.answers.storage.mappers;
 
-import cz.cyberrange.platform.answers.storage.api.reponses.PageResultResource;
+import cz.cyberrange.platform.answers.storage.api.responses.PageResultResource;
 import org.springframework.data.domain.Page;
 
 /**

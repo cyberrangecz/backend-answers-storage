@@ -93,18 +93,6 @@ public class ApiEntityError extends ApiError {
         return ApiEntityError.of(httpStatus, message, error, "", entityErrorDetail);
     }
 
-    private static String generateMessage(EntityErrorDetail entityErrorDetail, String defaultMessage) {
-        if (entityErrorDetail != null && entityErrorDetail.getEntity() != null && entityErrorDetail.getIdentifier() != null) {
-            return "Resource " + entityErrorDetail.getEntity() + " ("
-                    + entityErrorDetail.getIdentifier() + ": "
-                    + entityErrorDetail.getIdentifierValue() + ") not found.";
-        } else if (entityErrorDetail != null && entityErrorDetail.getReason() != null && !entityErrorDetail.getReason().isBlank()) {
-            return entityErrorDetail.getReason();
-        } else {
-            return defaultMessage;
-        }
-    }
-
     private static String getMessage(EntityErrorDetail entityErrorDetail, String defaultMessage) {
         if (entityErrorDetail == null) {
             return defaultMessage;

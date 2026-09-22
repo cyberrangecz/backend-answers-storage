@@ -1,4 +1,4 @@
-package cz.cyberrange.platform.answers.storage.api.reponses;
+package cz.cyberrange.platform.answers.storage.api.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

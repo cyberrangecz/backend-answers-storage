@@ -3,7 +3,7 @@ package cz.cyberrange.platform.answers.storage.mappers;
 import cz.cyberrange.platform.answers.storage.api.SandboxAnswersDto;
 import cz.cyberrange.platform.answers.storage.api.SandboxInfoCreateDto;
 import cz.cyberrange.platform.answers.storage.api.SandboxInfoDto;
-import cz.cyberrange.platform.answers.storage.api.reponses.PageResultResource;
+import cz.cyberrange.platform.answers.storage.api.responses.PageResultResource;
 import cz.cyberrange.platform.answers.storage.data.entities.SandboxAnswer;
 import cz.cyberrange.platform.answers.storage.data.entities.SandboxInfo;
 import org.mapstruct.Mapper;
