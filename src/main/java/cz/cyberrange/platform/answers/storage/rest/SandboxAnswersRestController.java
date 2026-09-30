@@ -3,15 +3,19 @@ package cz.cyberrange.platform.answers.storage.rest;
 import com.querydsl.core.types.Predicate;
 import cz.cyberrange.platform.answers.storage.api.SandboxInfoCreateDto;
 import cz.cyberrange.platform.answers.storage.api.SandboxInfoDto;
-import cz.cyberrange.platform.answers.storage.api.reponses.PageResultResource;
+import cz.cyberrange.platform.answers.storage.api.responses.PageResultResource;
 import cz.cyberrange.platform.answers.storage.data.entities.SandboxInfo;
 import cz.cyberrange.platform.answers.storage.exceptions.errors.ApiError;
 import cz.cyberrange.platform.answers.storage.service.SandboxAnswersService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import cz.cyberrange.platform.answers.storage.exceptions.errors.ApiEntityError;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -30,7 +34,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Api(value = "Endpoint for CyberrangeCZ Platform Sandbox Answers", tags = "sandboxes")
+/**
+ * REST endpoint for storing, deleting and reading sandboxes and the answers stored for them,
+ * addressed by sandbox reference id, by allocation id, or by the combination of access token
+ * and user id.
+ */
+@Tag(name = "sandboxes", description = "Sandboxes and the answers stored for them.")
+@ApiResponses({
+        @ApiResponse(responseCode = "500", description = "Unexpected server error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
+})
 @RestController
 @RequestMapping(path = "/sandboxes")
 @Validated
@@ -38,144 +50,143 @@ public class SandboxAnswersRestController {
 
     private final SandboxAnswersService sandboxAnswersService;
 
-    /**
-     * Instantiates a new SandboxAnswersRestController.
-     *
-     * @param sandboxAnswersService the user facade
-     */
     @Autowired
     public SandboxAnswersRestController(final SandboxAnswersService sandboxAnswersService) {
         this.sandboxAnswersService = sandboxAnswersService;
     }
 
     /**
-     * Get answers for particular cloud sandbox.
+     * Returns the answers stored for the cloud sandbox with the given reference id.
      *
-     * @param sandboxRefId of a cloud sandbox.
-     * @return answers for particular cloud sandbox.
+     * @param sandboxRefId reference id of the sandbox
+     * @return the sandbox with its answers
      */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get answers for cloud sandbox.",
-            response = SandboxInfoDto.class,
-            nickname = "findAnswersForParticularCloudSandbox",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answers for particular cloud sandbox were found.", response = SandboxInfoDto.class),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "findAnswersForParticularCloudSandbox",
+            summary = "Get the answers of a cloud sandbox",
+            description = "A cloud sandbox with no stored answers is reported as not found.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The sandbox with its answers.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SandboxInfoDto.class))),
+            @ApiResponse(responseCode = "404", description = "No sandbox has the given reference id.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class)))
     })
     @GetMapping(path = "/{sandboxRefId}/answers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SandboxInfoDto> findAnswersForParticularCloudSandbox(
-            @ApiParam(value = "ID sandbox for that we store answers.", required = true) @PathVariable(value = "sandboxRefId") String sandboxRefId) {
+            @Parameter(schema = @Schema(format = "uuid")) @PathVariable(value = "sandboxRefId") String sandboxRefId) {
         return ResponseEntity.ok(sandboxAnswersService.getSandboxAnswers(sandboxRefId));
     }
 
     /**
-     * Get answers for particular local sandbox.
+     * Returns the answers stored for the local sandbox with the given access token and user id.
      *
-     * @param accessToken access token identifies sandbox instance in which the local sandbox is/has been used.
-     * @param userId ID of the user who possess the local sandbox.
-     * @return answers for particular local sandbox.
+     * @param accessToken access token of the training instance the sandbox is used in
+     * @param userId id of the user who owns the sandbox
+     * @return the sandbox with its answers
      */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get answers for local sandbox.",
-            response = SandboxInfoDto.class,
-            nickname = "findAnswersForParticularLocalSandbox",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answers for particular local sandbox were found.", response = SandboxInfoDto.class),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "findAnswersForParticularLocalSandbox",
+            summary = "Get the answers of a local sandbox",
+            description = "A local sandbox is addressed by access token together with user id. " +
+                    "One with no stored answers is reported as not found.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The sandbox with its answers.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SandboxInfoDto.class))),
+            @ApiResponse(responseCode = "404", description = "No sandbox matches the access token and user id.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class))),
+            @ApiResponse(responseCode = "400", description = "The user id is not a valid number.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
     @GetMapping(path = "/access-tokens/{accessToken}/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SandboxInfoDto> findAnswersForParticularLocalSandbox(
-            @ApiParam(value = "Token of the training instance in which the local sandbox is used.", required = true) @PathVariable("accessToken") String accessToken,
-            @ApiParam(value = "ID of the user whose local sandbox to delete.", required = true) @PathVariable("userId") Long userId) {
+            @PathVariable("accessToken") String accessToken,
+            @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(sandboxAnswersService.getSandboxAnswers(accessToken, userId));
     }
 
     /**
-     * Get answer for particular cloud sandbox and by answer variable name.
+     * Returns the content of one answer of the cloud sandbox with the given reference id.
      *
-     * @param sandboxRefId       id of a sandbox.
-     * @param answerVariableName variable name of an answer.
-     * @return the content of the answer.
+     * @param sandboxRefId       reference id of the sandbox
+     * @param answerVariableName variable name of the answer
+     * @return the stored answer content
      */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get answer for particular cloud sandbox and by answer variable name.",
-            response = String.class,
-            nickname = "findAnswerByCloudSandboxAndVariableName",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answer for particular cloud sandbox and by identifier was found.", response = String.class),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "findAnswerByCloudSandboxAndVariableName",
+            summary = "Get one answer of a cloud sandbox")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The stored answer content.", content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "No answer matches the sandbox and variable name.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class)))
     })
-    @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{sandboxRefId}/answers/{answerVariableName}", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> findAnswerByCloudSandboxAndVariableName(
-            @ApiParam(value = "ID of sandbox for that we store answers.", required = true) @PathVariable(value = "sandboxRefId") String sandboxRefId,
-            @ApiParam(value = "Variable name of the answer.", required = true) @PathVariable(value = "answerVariableName") String answerVariableName) {
+            @Parameter(schema = @Schema(format = "uuid")) @PathVariable(value = "sandboxRefId") String sandboxRefId,
+            @PathVariable(value = "answerVariableName") String answerVariableName) {
         return ResponseEntity.ok(sandboxAnswersService.getAnswerBySandboxAndVariableName(sandboxRefId, answerVariableName));
     }
 
     /**
-     * Get answer for particular local sandbox and by answer variable name.
+     * Returns the content of one answer of the local sandbox with the given access token and
+     * user id.
      *
-     * @param accessToken access token identifies sandbox instance in which the local sandbox is/has been used.
-     * @param userId ID of the user who possess the local sandbox.
-     * @param answerVariableName variable name of an answer.
-     * @return the content of the answer.
+     * @param accessToken access token of the training instance the sandbox is used in
+     * @param userId id of the user who owns the sandbox
+     * @param answerVariableName variable name of the answer
+     * @return the stored answer content
      */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get answer for particular local sandbox and by answer variable name.",
-            response = String.class,
-            nickname = "findAnswerByLocalSandboxAndVariableName",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answer for particular local sandbox and by identifier was found.", response = String.class),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "findAnswerByLocalSandboxAndVariableName",
+            summary = "Get one answer of a local sandbox",
+            description = "A local sandbox is addressed by access token together with user id.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The stored answer content.", content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "No answer matches the sandbox and variable name.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class))),
+            @ApiResponse(responseCode = "400", description = "The user id is not a valid number.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
-    @GetMapping(path = "/access-tokens/{accessToken}/users/{userId}/answers/{answerVariableName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/access-tokens/{accessToken}/users/{userId}/answers/{answerVariableName}", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> findAnswerByLocalSandboxAndVariableName(
-            @ApiParam(value = "Token of the training instance in which the local sandbox is used.", required = true) @PathVariable("accessToken") String accessToken,
-            @ApiParam(value = "ID of the user whose local sandbox to delete.", required = true) @PathVariable("userId") Long userId,
-            @ApiParam(value = "Variable name of the answer.", required = true) @PathVariable(value = "answerVariableName") String answerVariableName) {
+            @PathVariable("accessToken") String accessToken,
+            @PathVariable("userId") Long userId,
+            @PathVariable(value = "answerVariableName") String answerVariableName) {
         return ResponseEntity.ok(sandboxAnswersService.getAnswerBySandboxAndVariableName(accessToken, userId, answerVariableName));
     }
 
     /**
-     * Get answers for all sandboxes.
+     * Returns one page of sandboxes with their answers. The id, sandboxRefId, allocationId,
+     * accessToken and userId query parameters each filter on the whole value, case-sensitively;
+     * the page is empty when nothing matches.
      *
-     * @return answers for all sandboxes.
+     * @param predicate condition sandboxes must satisfy
+     * @param pageable page and sort to apply
+     * @return the matching page of sandboxes with their answers
      */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get all sandboxes and their answers.",
-            response = SandboxInfoDto.class,
-            nickname = "findAnswersForAllSandboxes",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The answers for all sandboxes were found.", response = SandboxInfoDto.class),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "findAnswersForAllSandboxes",
+            summary = "List sandboxes with their answers",
+            description = "Filter with the id, sandboxRefId, allocationId, accessToken and userId query parameters. " +
+                    "Each one matches the whole value and is case-sensitive.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "A page of sandboxes with their answers.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageResultResource.class)))
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResultResource<SandboxInfoDto>> findAnswersForAllSandboxes(@QuerydslPredicate(root = SandboxInfo.class) Predicate predicate,
-                                                                                         Pageable pageable) {
+                                                                                         @ParameterObject Pageable pageable) {
         return ResponseEntity.ok(sandboxAnswersService.getAllSandboxesAnswers(predicate, pageable));
     }
 
     /**
-     * Store all answers for particular cloud/local sandbox.
+     * Stores a new sandbox together with all of its answers, answering with HTTP 201 and no
+     * body. The allocation unit id given in the body is not stored.
+     *
+     * @param sandboxInfoCreateDto the sandbox and its answers to store
+     * @return an empty response
      */
-    @ApiOperation(httpMethod = "POST",
-            value = "Store all answers for particular sandbox.",
-            nickname = "storeAnswersForParticularSandbox",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "The answers for particular sandbox were created."),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "storeAnswersForParticularSandbox",
+            summary = "Store a sandbox with all its answers",
+            description = "Identify the sandbox by sandboxRefId alone, or by accessToken with userId. " +
+                    "The allocation unit id sent here is not stored. " +
+                    "Storing a second time for the same sandbox is rejected.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Sandbox and answers stored."),
+            @ApiResponse(responseCode = "400", description = "The request body failed validation.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))),
+            @ApiResponse(responseCode = "409", description = "Answers for that sandbox already exist.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiEntityError.class))),
+            @ApiResponse(responseCode = "415", description = "The content type is not JSON.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -185,62 +196,72 @@ public class SandboxAnswersRestController {
     }
 
     /**
-     * Delete cloud sandbox reference with all answers by sandbox reference.
+     * Deletes the cloud sandbox with the given reference id together with its answers, answering
+     * with HTTP 204 and no body even when no sandbox has that reference id.
+     *
+     * @param sandboxRefId reference id of the sandbox to delete
+     * @return an empty response
      */
-    @ApiOperation(httpMethod = "DELETE",
-            value = "Delete cloud sandbox reference with all answers by sandbox reference.",
-            nickname = "deleteCloudSandboxReferenceWithAnswers",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The cloud sandbox reference with answers was successfully deleted."),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "deleteCloudSandboxReferenceWithAnswers",
+            summary = "Delete a cloud sandbox and its answers",
+            description = "Succeeds even when no sandbox has that reference id.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Sandbox and its answers deleted.")
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{sandboxRefId}")
     public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
-            @ApiParam(value = "ID of the user whose cloud sandbox to delete.", required = true) @PathVariable("sandboxRefId") String sandboxRefId) {
+            @Parameter(schema = @Schema(format = "uuid")) @PathVariable("sandboxRefId") String sandboxRefId) {
         sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(sandboxRefId);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * Delete cloud sandbox references with all answers by allocation ID.
+     * Deletes every cloud sandbox with the given allocation id together with their answers,
+     * answering with HTTP 204 and no body even when none matches. The path segment is declared
+     * as {@code allocationId} while the parameter is bound under the name {@code sandboxRefId}.
+     *
+     * @param allocationId allocation id of the sandboxes to delete
+     * @return an empty response
      */
-    @ApiOperation(httpMethod = "DELETE",
-            value = "Delete cloud sandbox references with all answers by allocation ID.",
-            nickname = "deleteCloudSandboxReferenceWithAnswersByAllocId",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The cloud sandbox reference with answers was successfully deleted."),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "deleteCloudSandboxReferenceWithAnswersByAllocId",
+            summary = "Delete cloud sandboxes by allocation id",
+            description = "Deletes every sandbox sharing the allocation id. Succeeds even when none matches.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Matching sandboxes and their answers deleted."),
+            @ApiResponse(responseCode = "400", description = "The allocation id is not a valid number.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{allocationId}")
     public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
-            @ApiParam(value = "allocationID of the cloud sandboxes to delete.", required = true) @PathVariable("sandboxRefId") Long allocationId) {
+            @PathVariable("sandboxRefId") Long allocationId) {
         sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(allocationId);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * Delete local sandbox reference with all answers.
+     * Deletes the local sandbox with the given access token and user id together with its
+     * answers, answering with HTTP 204 and no body even when no sandbox matches both values.
+     *
+     * @param accessToken access token of the training instance the sandbox is used in
+     * @param userId id of the user who owns the sandbox
+     * @return an empty response
      */
-    @ApiOperation(httpMethod = "DELETE",
-            value = "Delete local sandbox reference with all answers.",
-            nickname = "deleteLocalSandboxReferenceWithAnswers",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The local sandbox reference with answers was successfully deleted."),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    @Operation(
+            operationId = "deleteLocalSandboxReferenceWithAnswers",
+            summary = "Delete a local sandbox and its answers",
+            description = "Succeeds even when no sandbox matches the access token and user id.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Sandbox and its answers deleted."),
+            @ApiResponse(responseCode = "400", description = "The user id is not a valid number.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/access-tokens/{accessToken}/users/{userId}")
     public ResponseEntity<Void> deleteLocalSandboxReferenceWithAnswers(
-            @ApiParam(value = "Token of the training instance in which the local sandbox is used.", required = true) @PathVariable("accessToken") String accessToken,
-            @ApiParam(value = "ID of the user whose local sandbox to delete.", required = true) @PathVariable("userId") Long userId) {
+            @PathVariable("accessToken") String accessToken,
+            @PathVariable("userId") Long userId) {
         sandboxAnswersService.deleteLocalSandboxReferenceWithAnswers(accessToken, userId);
         return ResponseEntity.noContent().build();
     }

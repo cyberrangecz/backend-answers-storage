@@ -16,6 +16,11 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A sandbox tracked for its answers. It is identified either by {@code sandboxRefId} alone or by
+ * {@code accessToken} together with {@code userId}, and each of those two forms is unique.
+ * Deleting a sandbox deletes its answers with it.
+ */
 @Entity
 @Table(name = "sandbox_info")
 @NamedQueries({
@@ -39,6 +44,10 @@ public class SandboxInfo implements Serializable {
     private String accessToken;
     @Column(name = "user_id")
     private Long userId;
+    /**
+     * The answers stored for this sandbox. Removing an answer from this set deletes it, and
+     * clearing the set deletes them all.
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sandboxInfo",
             cascade = CascadeType.ALL)
     private Set<SandboxAnswer> sandboxAnswers = new HashSet<>();

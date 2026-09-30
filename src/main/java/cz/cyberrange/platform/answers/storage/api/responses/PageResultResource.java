@@ -1,29 +1,28 @@
-package cz.cyberrange.platform.answers.storage.api.reponses;
+package cz.cyberrange.platform.answers.storage.api.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
- * This class is used to replace Page class and reduce number of returned elements (standard Page
- * class contains fields, which are not useful (backward compatability)).
+ * One page of results together with its paging summary.
  */
-@ApiModel(value = "PageResultResource", description = "Content (Retrieved data) and meta information about REST API result page. Including page number, number of elements in page, size of elements, total number of elements and total number of pages")
+@Schema(name = "PageResultResource", description = "One page of results together with its paging summary.")
 public class PageResultResource<E> {
 
     @JsonProperty(required = true)
-    @ApiModelProperty(value = "Content - (Retrieved data) from databases.")
     private List<E> content;
     @JsonProperty(required = true)
-    @ApiModelProperty(value = "Pagination including: page number, number of elements in page, size, total elements and total pages.")
     private Pagination pagination;
 
     public PageResultResource() {
     }
 
+    /**
+     * Builds a page result whose pagination summary stays null.
+     */
     public PageResultResource(List<E> content) {
         super();
         this.content = content;
@@ -35,6 +34,9 @@ public class PageResultResource<E> {
         this.pagination = pageMetadata;
     }
 
+    /**
+     * Returns an unmodifiable view of the content list.
+     */
     public List<E> getContent() {
         return Collections.unmodifiableList(content);
     }
@@ -61,19 +63,19 @@ public class PageResultResource<E> {
 
     public static class Pagination {
 
-        @ApiModelProperty(value = "Page number.", example = "1")
+        @Schema(description = "Index of this page within the whole result.", example = "1")
         @JsonProperty(required = true)
         private int number;
-        @ApiModelProperty(value = "Number of elements in page.", example = "20")
+        @Schema(description = "How many items this page holds.", example = "20")
         @JsonProperty(required = true, value = "number_of_elements")
         private int numberOfElements;
-        @ApiModelProperty(value = "Page size.", example = "20")
+        @Schema(description = "Largest number of items a page may hold.", example = "20")
         @JsonProperty(required = true)
         private int size;
-        @ApiModelProperty(value = "Total number of elements in this resource (in all Pages).", example = "100")
+        @Schema(description = "How many items all pages hold together.", example = "100")
         @JsonProperty(required = true, value = "total_elements")
         private long totalElements;
-        @ApiModelProperty(value = "Total number of pages.", example = "5")
+        @Schema(description = "Total number of pages.", example = "5")
         @JsonProperty(required = true, value = "total_pages")
         private int totalPages;
 

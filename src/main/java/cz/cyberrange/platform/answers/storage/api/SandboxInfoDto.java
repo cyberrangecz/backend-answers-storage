@@ -1,37 +1,45 @@
 package cz.cyberrange.platform.answers.storage.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiModel(
-        value = "SandboxInfoDto"
-)
+/**
+ * API representation of a stored sandbox and its answers. A field left null is omitted from the
+ * serialized JSON rather than written as null.
+ */
+@Schema(name = "SandboxInfoDto", description = "A stored sandbox with its answers; identifiers left unset are omitted.")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SandboxInfoDto {
 
-    @ApiModelProperty(value = "The identifier of a sandbox for that we store the answers", example = "string")
+    @Schema(format = "uuid", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
     private String sandboxRefId;
-    @ApiModelProperty(value = "The identifier of a sandbox allocation", example = "12")
+    @Schema(example = "12")
     private Long allocationId;
-    @ApiModelProperty(value = "The identifier of the training instance in which the local sandbox is/has been used.", example = "abc-123")
+    @Schema(example = "abc-123")
     private String accessToken;
-    @ApiModelProperty(value = "The identifier of the user who possess the local sandbox.", example = "12")
+    @Schema(example = "12")
     private Long userId;
-    @ApiModelProperty(value = "The answers for given sandbox")
     private List<SandboxAnswersDto> sandboxAnswers = new ArrayList<>();
 
     public SandboxInfoDto() {
     }
 
+    /**
+     * Builds a DTO identified by sandboxRefId, leaving allocationId, accessToken and userId
+     * unset.
+     */
     public SandboxInfoDto(String sandboxRefId, List<SandboxAnswersDto> sandboxAnswers) {
         this.sandboxRefId = sandboxRefId;
         this.sandboxAnswers = sandboxAnswers;
     }
 
+    /**
+     * Builds a DTO identified by accessToken and userId, leaving sandboxRefId and allocationId
+     * unset.
+     */
     public SandboxInfoDto(String accessToken, Long userId, List<SandboxAnswersDto> sandboxAnswers) {
         this.accessToken = accessToken;
         this.userId = userId;

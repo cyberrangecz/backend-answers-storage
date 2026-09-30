@@ -1,5 +1,9 @@
 package cz.cyberrange.platform.answers.storage.exceptions;
 
+/**
+ * Base for exceptions that carry a detail about the entity involved in the failure.
+ * Each subclass maps to its own HTTP status and is answered with an ApiEntityError body.
+ */
 public abstract class ExceptionWithEntity extends RuntimeException {
     private EntityErrorDetail entityErrorDetail;
 
@@ -7,6 +11,11 @@ public abstract class ExceptionWithEntity extends RuntimeException {
         super();
     }
 
+    /**
+     * Attaches the given entity detail, giving it a default reason when it carries none.
+     *
+     * @param entityErrorDetail the detail to attach
+     */
     protected ExceptionWithEntity(EntityErrorDetail entityErrorDetail) {
         this.entityErrorDetail = entityErrorDetail;
         if (entityErrorDetail.getReason() == null) {
@@ -14,6 +23,13 @@ public abstract class ExceptionWithEntity extends RuntimeException {
         }
     }
 
+    /**
+     * Attaches the given entity detail and cause, giving the detail a default reason when it
+     * carries none.
+     *
+     * @param entityErrorDetail the detail to attach
+     * @param cause the exception that caused this one
+     */
     protected ExceptionWithEntity(EntityErrorDetail entityErrorDetail, Throwable cause) {
         super(cause);
         this.entityErrorDetail = entityErrorDetail;
@@ -26,15 +42,18 @@ public abstract class ExceptionWithEntity extends RuntimeException {
         super(cause);
     }
 
+    /**
+     * @return the attached entity detail, or null when the exception carries none
+     */
     public EntityErrorDetail getEntityErrorDetail() {
         return entityErrorDetail;
     }
 
     /**
-     * Method to get default reason of error based on other attributes when no reason is provided.
+     * Returns the reason text to use when the entity detail carries none.
      *
-     * @param entityErrorDetail
-     * @return default detailed reason of error.
+     * @param entityErrorDetail the detail to describe
+     * @return the reason text
      */
     protected abstract String createDefaultReason(EntityErrorDetail entityErrorDetail);
 
