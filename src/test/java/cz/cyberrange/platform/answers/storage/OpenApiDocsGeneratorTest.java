@@ -4,6 +4,7 @@ import cz.cyberrange.platform.answers.storage.config.PersistenceConfigTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -27,15 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @EnabledIfSystemProperty(named = "docs.output.directory", matches = ".+")
 class OpenApiDocsGeneratorTest {
 
-    private static final String CONTEXT_PATH = "/answers-storage/api/v1";
     private static final String FILE_NAME = "answers-storage-swagger-docs.yaml";
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     void generateOpenApiDocs() throws Exception {
-        String yaml = mockMvc.perform(get(CONTEXT_PATH + "/v3/api-docs.yaml").contextPath(CONTEXT_PATH))
+        String yaml = mockMvc.perform(get(contextPath + "/v3/api-docs.yaml").contextPath(contextPath))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
