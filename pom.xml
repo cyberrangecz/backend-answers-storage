@@ -7,7 +7,7 @@
     <artifactId>answers-storage</artifactId>
     <name>CyberRangeCZ Platform Answers Storage</name>
     <description>Backend handling variant sandbox answers</description>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
 
     <url>https://github.com/cyberrangecz/backend-answers-storage</url>
     <scm>
@@ -219,6 +219,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <!--Expose the project version to OpenApiConfiguration via BuildProperties-->
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -270,4 +278,33 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!--Generate OpenAPI documentation into doc-files, activated by -Dswagger.skip=false.
+            Runs only OpenApiDocsGeneratorTest, even when -DskipTests is given.-->
+        <profile>
+            <id>docs</id>
+            <activation>
+                <property>
+                    <name>swagger.skip</name>
+                    <value>false</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>false</skipTests>
+                            <test>OpenApiDocsGeneratorTest</test>
+                            <systemPropertyVariables>
+                                <docs.output.directory>${project.basedir}/doc-files</docs.output.directory>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
