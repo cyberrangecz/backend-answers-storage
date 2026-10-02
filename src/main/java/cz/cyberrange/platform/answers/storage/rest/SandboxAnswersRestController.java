@@ -210,7 +210,7 @@ public class SandboxAnswersRestController {
             @ApiResponse(responseCode = "204", description = "Sandbox and its answers deleted.")
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(path = "/{sandboxRefId}")
+    @DeleteMapping(path = "/sandbox-refs/{sandboxRefId}")
     public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
             @Parameter(schema = @Schema(format = "uuid")) @PathVariable("sandboxRefId") String sandboxRefId) {
         sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(sandboxRefId);
@@ -219,8 +219,7 @@ public class SandboxAnswersRestController {
 
     /**
      * Deletes every cloud sandbox with the given allocation id together with their answers,
-     * answering with HTTP 204 and no body even when none matches. The path segment is declared
-     * as {@code allocationId} while the parameter is bound under the name {@code sandboxRefId}.
+     * answering with HTTP 204 and no body even when none matches.
      *
      * @param allocationId allocation id of the sandboxes to delete
      * @return an empty response
@@ -236,7 +235,7 @@ public class SandboxAnswersRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{allocationId}")
     public ResponseEntity<Void> deleteCloudSandboxReferenceWithAnswers(
-            @PathVariable("sandboxRefId") Long allocationId) {
+            @PathVariable("allocationId") Long allocationId) {
         sandboxAnswersService.deleteCloudSandboxReferenceWithAnswers(allocationId);
         return ResponseEntity.noContent().build();
     }
