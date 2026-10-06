@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Import;
 @SpringBootTest
 class AnswersStorageApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
-
+  @Test
+  void contextLoads() {}
 }
