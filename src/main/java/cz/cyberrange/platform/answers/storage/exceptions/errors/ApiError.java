@@ -1,8 +1,9 @@
 package cz.cyberrange.platform.answers.storage.exceptions.errors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,10 @@ import org.springframework.http.HttpStatus;
 public class ApiError {
 
   @Schema(
-      description = "When the error happened, in milliseconds since the epoch.",
-      example = "1758312000000")
-  private long timestamp;
+      description = "When the error happened, as a UTC instant with millisecond precision.",
+      example = "2019-11-20T10:28:02.727Z")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+  private Instant timestamp;
 
   @Schema(example = "NOT_FOUND")
   private HttpStatus status;
@@ -42,7 +44,7 @@ public class ApiError {
     this.status = httpStatus;
     this.message = message;
     this.path = path;
-    this.timestamp = System.currentTimeMillis();
+    this.timestamp = Instant.now();
   }
 
   /**
@@ -100,11 +102,11 @@ public class ApiError {
     return ApiError.of(httpStatus, message, error, "");
   }
 
-  public long getTimestamp() {
+  public Instant getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(long timestamp) {
+  public void setTimestamp(Instant timestamp) {
     this.timestamp = timestamp;
   }
 
@@ -133,12 +135,13 @@ public class ApiError {
   }
 
   /**
-   * Replaces the contributing errors with the single given one.
+   * Replaces the contributing errors with the single given one. A null error leaves the errors
+   * unset, so the field is omitted from the body.
    *
-   * @param error the single contributing error
+   * @param error the single contributing error, may be null
    */
   public void setError(final String error) {
-    errors = Arrays.asList(error);
+    errors = error == null ? null : List.of(error);
   }
 
   public String getPath() {

@@ -1,11 +1,11 @@
 ARG PROJECT_ARTIFACT_ID=answers-storage
 
 ############ BUILD STAGE ############
-FROM maven:3.9.11-eclipse-temurin-25 AS build
+FROM maven:3.10.0-eclipse-temurin-25 AS build
 WORKDIR /app
 
 ARG PROJECT_ARTIFACT_ID
-ARG MAVEN_CLI_OPTS=EXTRA-OPTIONS
+ARG MAVEN_CLI_OPTS=
 
 COPY pom.xml /app/pom.xml
 COPY src /app/src
@@ -28,11 +28,14 @@ COPY entrypoint.sh /app/entrypoint.sh
 COPY --from=build /app/$PROJECT_ARTIFACT_ID.jar ./
 
 RUN apt-get update && \
-    # Required to use nc command in the wait for it function, see entrypoint.sh
-    apt-get install -y netcat-openbsd && \
-    # Make a file executable
+    # nc is used by the wait for it function, see entrypoint.sh; curl by the HEALTHCHECK
+    apt-get install -y netcat-openbsd curl && \
+    rm -rf /var/lib/apt/lists/* && \
     chmod a+x entrypoint.sh
 
 EXPOSE 8087
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+    CMD curl --fail --silent http://localhost:8087/answers-storage/api/v1/actuator/health || exit 1
 
 ENTRYPOINT ["./entrypoint.sh"]

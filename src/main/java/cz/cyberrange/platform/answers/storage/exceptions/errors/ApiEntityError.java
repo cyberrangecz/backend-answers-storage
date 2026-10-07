@@ -2,6 +2,7 @@ package cz.cyberrange.platform.answers.storage.exceptions.errors;
 
 import cz.cyberrange.platform.answers.storage.exceptions.EntityErrorDetail;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class ApiEntityError extends ApiError {
     this.setStatus(httpStatus);
     this.setMessage(getMessage(entityErrorDetail, message));
     this.setPath(path);
-    this.setTimestamp(System.currentTimeMillis());
+    this.setTimestamp(Instant.now());
     this.setEntityErrorDetail(entityErrorDetail);
   }
 

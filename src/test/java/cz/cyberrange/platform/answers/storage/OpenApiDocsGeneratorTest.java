@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import cz.cyberrange.platform.answers.storage.config.PersistenceConfigTest;
+import cz.cyberrange.platform.answers.storage.config.TestcontainersConfiguration;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * Writes the springdoc OpenAPI document to the directory given by the {@code docs.output.directory}
  * system property, which the {@code docs} Maven profile sets. Skipped in regular test runs.
  */
-@Import(PersistenceConfigTest.class)
+@Import({PersistenceConfigTest.class, TestcontainersConfiguration.class})
 @SpringBootTest
 @AutoConfigureMockMvc
 @EnabledIfSystemProperty(named = "docs.output.directory", matches = ".+")
