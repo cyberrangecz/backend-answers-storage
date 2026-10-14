@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -239,7 +240,14 @@ public class SandboxAnswersRestController {
         content =
             @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = PageResultResource.class)))
+                schema = @Schema(implementation = PageResultResource.class))),
+    @ApiResponse(
+        responseCode = "400",
+        description = "The sort parameter names a property that is not sortable.",
+        content =
+            @Content(
+                mediaType = "application/problem+json",
+                schema = @Schema(implementation = ProblemDetail.class)))
   })
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PageResultResource<SandboxInfoDto>> findAnswersForAllSandboxes(

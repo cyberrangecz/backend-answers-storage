@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -42,9 +43,10 @@ public class SandboxInfo implements Serializable {
   private Long userId;
 
   /**
-   * The answers stored for this sandbox. Removing an answer from this set deletes it, and clearing
-   * the set deletes them all.
+   * The answers stored for this sandbox, in ascending id order. Removing an answer from this set
+   * deletes it, and clearing the set deletes them all.
    */
+  @OrderBy("id")
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "sandboxInfo", cascade = CascadeType.ALL)
   private Set<SandboxAnswer> sandboxAnswers = new HashSet<>();
 

@@ -12,12 +12,17 @@ import cz.cyberrange.platform.answers.storage.exceptions.EntityConflictException
 import cz.cyberrange.platform.answers.storage.exceptions.EntityErrorDetail;
 import cz.cyberrange.platform.answers.storage.exceptions.EntityNotFoundException;
 import cz.cyberrange.platform.answers.storage.mappers.SandboxInfoMapper;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Business logic for storing, deleting and querying sandboxes and their stored answers, addressed
@@ -26,6 +31,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class SandboxAnswersService {
+
+  /** Property every sandbox page order ends with, which makes the order of equal rows total. */
+  public static final String TIEBREAKER_PROPERTY = "id";
+
+  /** Sandbox properties a page may be sorted by. */
+  public static final List<String> SORTABLE_PROPERTIES =
+      List.of("sandboxRefId", "allocationId", "accessToken", "userId", TIEBREAKER_PROPERTY);
 
   private final SandboxInfoRepository sandboxInfoRepository;
   private final SandboxAnswerRepository sandboxAnswerRepository;
@@ -140,14 +152,31 @@ public class SandboxAnswersService {
    * filter. The page is empty when nothing matches.
    *
    * @param predicate condition sandboxes must satisfy
-   * @param pageable page and sort to apply
+   * @param pageable page and sort to apply; the order always ends with ascending id
    * @return the matching page of sandboxes with a pagination summary
+   * @throws ResponseStatusException with HTTP 400 when the sort names a property that is not
+   *     sortable
    */
   @Transactional(readOnly = true)
   public PageResultResource<SandboxInfoDto> getAllSandboxesAnswers(
       Predicate predicate, Pageable pageable) {
-    Page<SandboxInfo> sandboxInfo = sandboxInfoRepository.findAll(predicate, pageable);
+    pageable.getSort().forEach(SandboxAnswersService::requireSortable);
+    Pageable pageableEndingWithId =
+        PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            pageable.getSort().and(Sort.by(TIEBREAKER_PROPERTY)));
+    Page<SandboxInfo> sandboxInfo = sandboxInfoRepository.findAll(predicate, pageableEndingWithId);
     return sandboxInfoMapper.mapToPageResultResource(sandboxInfo);
+  }
+
+  private static void requireSortable(Sort.Order order) {
+    if (!SORTABLE_PROPERTIES.contains(order.getProperty())) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          "Sorting by '%s' is not supported. Sortable properties: %s."
+              .formatted(order.getProperty(), String.join(", ", SORTABLE_PROPERTIES)));
+    }
   }
 
   /**
