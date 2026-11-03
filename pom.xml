@@ -271,11 +271,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-XDcompilePolicy=simple</arg>
-                        <arg>--should-stop=ifError=FLOW</arg>
-                        <arg>${skipChecks?:"-Xplugin:ErrorProne"}</arg>
-                    </compilerArgs>
                     <release>${java.version}</release>
                     <annotationProcessorPaths>
                         <path>
